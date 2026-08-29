@@ -1065,10 +1065,21 @@ input[type='range'] {
   min-width: 0;
   scroll-snap-align: center;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--cols, 2), var(--tile));
   gap: clamp(10px, 2vmin, 16px);
+  align-content: center;
+  justify-content: center;
+  height: 100%;
   padding: clamp(8px, 1.6vmin, 14px) 2px;
+  /* square-ish tiles sized to the scarcer dimension */
+  --tile: min(42vw, 22dvh, 300px);
+}
+
+@media (orientation: landscape) {
+  .gallery-page {
+    --cols: 3;
+    --tile: min(26vw, 30dvh, 320px);
+  }
 }
 
 .gallery-tile {
@@ -1087,9 +1098,9 @@ input[type='range'] {
 }
 
 .gallery-tile img {
-  flex: 1;
-  min-height: 0;
+  display: block;
   width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 
