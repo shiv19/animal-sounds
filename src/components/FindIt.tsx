@@ -16,13 +16,13 @@ interface Props {
 }
 
 const ROUNDS = 5
-const SCENE_ANIMALS = 8
 const MISSES_BEFORE_HINT = 2
 
 interface Placement {
   x: number
   y: number
   tilt: number
+  scale: number
 }
 
 interface Game {
@@ -30,17 +30,26 @@ interface Game {
   scene: Array<{ animal: AnimalAssets; pos: Placement }>
 }
 
+/** Jittered slot grid tuned to the current orientation, so stickers spread
+    across the whole screen and can never overlap or hide behind the UI.
+    Rows stay inside the grass band — only sun and clouds live in the sky. */
+function sceneSlots(landscape: boolean): Array<{ x: number; y: number }> {
+  const cols = landscape ? [10, 30, 50, 70, 90] : [17, 50, 83]
+  const rows = landscape ? [56, 82] : [57, 72, 87]
+  return shuffled(cols.flatMap((x) => rows.map((y) => ({ x, y }))))
+}
+
 /** Favorite animals become the round targets when there are enough of them. */
 function buildGame(favorites: string[]): Game {
+  // Landscape spreads wider, so it can afford a couple more distractors.
+  const landscape = window.innerWidth > window.innerHeight
+  const sceneSize = landscape ? 10 : 8
   const favPool = shuffled(ANIMALS.filter((a) => favorites.includes(a.id)))
   const pool = favPool.length >= ROUNDS ? favPool : shuffled(ANIMALS)
   const targets = pool.slice(0, ROUNDS)
   const rest = shuffled(ANIMALS.filter((a) => !targets.some((t) => t.id === a.id)))
-  const scene = shuffled([...targets, ...rest.slice(0, SCENE_ANIMALS - targets.length)])
-  // Jittered slot grid: stickers can never overlap or hide behind the UI.
-  const cols = [14, 38, 62, 86]
-  const rows = [34, 72]
-  const slots = shuffled(cols.flatMap((x) => rows.map((y) => ({ x, y }))))
+  const scene = shuffled([...targets, ...rest.slice(0, sceneSize - targets.length)])
+  const slots = sceneSlots(landscape)
   return {
     targets,
     scene: scene.map((animal, i) => {
@@ -48,9 +57,10 @@ function buildGame(favorites: string[]): Game {
       return {
         animal,
         pos: {
-          x: slot.x + (Math.random() * 8 - 4),
-          y: slot.y + (Math.random() * 10 - 5),
-          tilt: Math.random() * 10 - 5
+          x: slot.x + (Math.random() * 7 - 3.5),
+          y: slot.y + (Math.random() * 5 - 2.5),
+          tilt: Math.random() * 12 - 6,
+          scale: 0.9 + Math.random() * 0.3
         }
       }
     })
@@ -181,11 +191,18 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
           <button
             key={animal.id}
             className={stickerClass(animal)}
-            style={{ left: `${pos.x}%`, top: `${pos.y}%`, '--tilt': `${pos.tilt}deg` } as CSSProperties}
+            style={
+              {
+                left: `${pos.x}%`,
+                top: `${pos.y}%`,
+                '--tilt': `${pos.tilt}deg`,
+                '--s': pos.scale
+              } as CSSProperties
+            }
             onClick={() => tap(animal)}
-            aria-label="animal"
+            aria-label={animal.name}
           >
-            <img src={animal.photo} alt="" draggable={false} />
+            {animal.emoji}
           </button>
         ))}
       </div>
@@ -228,85 +245,52 @@ function ShuffleIcon() {
   )
 }
 
-/** Flat storybook farm, drawn once and scaled to cover the scene. */
+/** Full-bleed storybook farm: gradient sky and grass that fit any aspect
+    ratio, plus landmarks pinned to the edges so nothing is ever cropped. */
 function FarmScene() {
   return (
-    <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden>
-      <rect width="1600" height="1000" fill="#c9e0ee" />
-      <circle cx="1370" cy="128" r="95" fill="#f9e2a0" />
-      <circle cx="1370" cy="128" r="60" fill="#f4c95d" />
-      {/* rolling hills */}
-      <path d="M0 520 Q400 380 800 500 T1600 470 V1000 H0 Z" fill="#b7ce8f" />
-      <path d="M0 640 Q500 520 1000 620 T1600 600 V1000 H0 Z" fill="#9dbe7c" />
-      <rect y="760" width="1600" height="240" fill="#8fbf6b" />
-      {/* trees */}
-      <g>
-        <rect x="567" y="405" width="26" height="80" rx="6" fill="#8a5a3b" />
-        <circle cx="580" cy="375" r="58" fill="#6fa05c" />
-        <circle cx="540" cy="415" r="42" fill="#7faf6b" />
-        <circle cx="622" cy="412" r="44" fill="#7faf6b" />
-      </g>
-      <g>
-        <rect x="66" y="470" width="22" height="66" rx="6" fill="#8a5a3b" />
-        <circle cx="77" cy="445" r="48" fill="#6fa05c" />
-        <circle cx="44" cy="480" r="34" fill="#7faf6b" />
-        <circle cx="112" cy="478" r="36" fill="#7faf6b" />
-      </g>
-      {/* barn */}
-      <g>
-        <rect x="1100" y="430" width="300" height="300" fill="#c46a4a" />
-        <polygon points="1070,430 1250,300 1430,430" fill="#8a4b36" />
-        <rect x="1215" y="560" width="72" height="170" rx="4" fill="#7a422f" />
-        <path d="M1215 560l72 170M1287 560l-72 170" stroke="#fff7e8" strokeWidth="7" />
-        <circle cx="1250" cy="498" r="26" fill="#fff7e8" stroke="#8a4b36" strokeWidth="8" />
-      </g>
-      {/* fence */}
-      <g fill="#a9805b">
-        <rect x="430" y="738" width="16" height="122" rx="5" />
-        <rect x="526" y="738" width="16" height="122" rx="5" />
-        <rect x="622" y="738" width="16" height="122" rx="5" />
-        <rect x="718" y="738" width="16" height="122" rx="5" />
-        <rect x="814" y="738" width="16" height="122" rx="5" />
-        <rect x="422" y="760" width="416" height="13" rx="6" />
-        <rect x="422" y="812" width="416" height="13" rx="6" />
-      </g>
-      {/* pond */}
-      <ellipse cx="330" cy="860" rx="235" ry="88" fill="#9fc6d8" />
-      <ellipse cx="330" cy="860" rx="235" ry="88" fill="none" stroke="#86b0c4" strokeWidth="10" />
-      <ellipse cx="270" cy="838" rx="52" ry="14" fill="#b9d7e4" />
-      {/* tractor */}
-      <g>
-        <rect x="660" y="838" width="160" height="58" rx="12" fill="#d9822b" />
-        <rect x="688" y="786" width="74" height="62" rx="10" fill="#e8a13c" />
-        <rect x="698" y="796" width="54" height="42" rx="6" fill="#c9e0ee" />
-        <circle cx="700" cy="912" r="44" fill="#4a382b" />
-        <circle cx="700" cy="912" r="17" fill="#a9805b" />
-        <circle cx="796" cy="922" r="30" fill="#4a382b" />
-        <circle cx="796" cy="922" r="11" fill="#a9805b" />
-      </g>
-      {/* mud puddle */}
-      <ellipse cx="1060" cy="930" rx="115" ry="34" fill="#b99b72" />
-      <ellipse cx="1040" cy="922" rx="46" ry="13" fill="#c9ad88" />
-      {/* hay bale */}
-      <rect x="1462" y="856" width="96" height="64" rx="12" fill="#d9b36b" />
-      <path d="M1462 888h96M1510 856v64" stroke="#c49c50" strokeWidth="6" />
-      {/* flowers + tufts */}
-      <g fill="#f2a2b6">
-        <circle cx="480" cy="905" r="9" />
-        <circle cx="900" cy="950" r="9" />
-        <circle cx="1240" cy="905" r="9" />
-        <circle cx="1450" cy="940" r="9" />
-      </g>
-      <g fill="#fffdf7">
-        <circle cx="496" cy="918" r="6" />
-        <circle cx="916" cy="962" r="6" />
-        <circle cx="1256" cy="918" r="6" />
-        <circle cx="1466" cy="952" r="6" />
-      </g>
-      <g stroke="#6fa05c" strokeWidth="6" strokeLinecap="round">
-        <path d="M760 960v-26M744 958l10-22M776 958l-10-22" />
-        <path d="M1360 955v-26M1344 953l10-22M1376 953l-10-22" />
-      </g>
+    <div className="farm-backdrop" aria-hidden>
+      <div className="farm-sky" />
+      <span className="farm-prop sun">🌞</span>
+      <span className="farm-prop cloud cloud-a">☁️</span>
+      <span className="farm-prop cloud cloud-b">☁️</span>
+      <svg className="farm-hills" viewBox="0 0 1200 90" preserveAspectRatio="none">
+        <path d="M0 90 V40 Q170 4 380 28 T760 22 T1200 30 V90 Z" fill="#b7ce8f" />
+      </svg>
+      <div className="farm-ground" />
+      <svg className="farm-meadow" viewBox="0 0 1200 80" preserveAspectRatio="none">
+        <path d="M0 80 V34 Q210 0 450 20 T860 16 T1200 24 V80 Z" fill="#9dbe7c" />
+      </svg>
+      <span className="farm-prop tree tree-a">🌳</span>
+      <span className="farm-prop tree tree-b">🌲</span>
+      <Barn />
+      <Pond />
+      <span className="farm-prop tractor">🚜</span>
+      <span className="farm-prop flower flower-a">🌻</span>
+      <span className="farm-prop flower flower-b">🌷</span>
+      <span className="farm-prop flower flower-c">🌼</span>
+    </div>
+  )
+}
+
+function Barn() {
+  return (
+    <svg className="farm-prop barn" viewBox="0 0 360 430">
+      <rect x="30" y="130" width="300" height="300" fill="#c46a4a" />
+      <polygon points="0,130 180,0 360,130" fill="#8a4b36" />
+      <rect x="145" y="260" width="72" height="170" rx="4" fill="#7a422f" />
+      <path d="M145 260l72 170M217 260l-72 170" stroke="#fff7e8" strokeWidth="7" />
+      <circle cx="180" cy="198" r="26" fill="#fff7e8" stroke="#8a4b36" strokeWidth="8" />
+    </svg>
+  )
+}
+
+function Pond() {
+  return (
+    <svg className="farm-prop pond" viewBox="0 0 470 176">
+      <ellipse cx="235" cy="88" rx="235" ry="88" fill="#9fc6d8" />
+      <ellipse cx="235" cy="88" rx="235" ry="88" fill="none" stroke="#86b0c4" strokeWidth="10" />
+      <ellipse cx="175" cy="66" rx="52" ry="14" fill="#b9d7e4" />
     </svg>
   )
 }

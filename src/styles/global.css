@@ -1134,12 +1134,15 @@ input[type='range'] {
 /* ---------- find it ---------- */
 
 .findit-top {
+  position: absolute;
+  top: calc(58px + env(safe-area-inset-top));
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
-  z-index: 3;
+  z-index: 4;
 }
 
 .find-chip {
@@ -1149,56 +1152,191 @@ input[type='range'] {
   box-shadow: 0 10px 24px -12px rgba(74, 56, 43, 0.5);
 }
 
+/* The scene IS the screen: play area fills the viewport in any orientation,
+   landmarks pin to the edges so nothing ever crops away. */
 .findit-scene {
-  position: relative;
-  width: 100%;
-  /* fixed aspect matching the SVG (16:10) so nothing is ever cropped */
-  max-width: calc((100dvh - 200px) * 1.6);
-  aspect-ratio: 16 / 10;
-  border-radius: clamp(18px, 4vmin, 28px);
+  position: fixed;
+  inset: 0;
   overflow: hidden;
-  background: #c9e0ee;
-  box-shadow: 0 24px 48px -22px rgba(74, 56, 43, 0.45);
+  background: #b9d9ec;
 }
 
-.findit-scene > svg {
+.farm-backdrop {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  pointer-events: none;
 }
 
+.farm-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #a9d0e8 0%, #cde6f3 58%, #d9edf7 100%);
+}
+
+.farm-prop {
+  position: absolute;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.sun {
+  top: 12%;
+  right: 24%;
+  font-size: clamp(30px, 9vmin, 84px);
+}
+
+.cloud-a,
+.cloud-b {
+  filter: drop-shadow(0 4px 5px rgba(74, 56, 43, 0.1));
+}
+
+.cloud-a {
+  top: 12%;
+  left: 11%;
+  font-size: clamp(26px, 8vmin, 76px);
+  animation: cloud-drift 26s ease-in-out infinite alternate;
+}
+
+.cloud-b {
+  top: 21%;
+  left: 44%;
+  font-size: clamp(20px, 6vmin, 56px);
+  opacity: 0.85;
+  animation: cloud-drift 34s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes cloud-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 4vmin 1vmin;
+  }
+}
+
+.farm-hills {
+  position: absolute;
+  left: 0;
+  bottom: 46%;
+  width: 100%;
+  height: 8%;
+}
+
+.farm-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46%;
+  background: linear-gradient(180deg, #9dbe7c, #7fae5d);
+}
+
+.farm-meadow {
+  position: absolute;
+  left: 0;
+  bottom: 46%;
+  width: 100%;
+  height: 7%;
+}
+
+.tree {
+  filter: drop-shadow(0 5px 5px rgba(74, 56, 43, 0.18));
+}
+
+.tree-a {
+  left: 6%;
+  bottom: 43%;
+  font-size: clamp(44px, 12vmin, 120px);
+}
+
+.tree-b {
+  left: 58%;
+  bottom: 44%;
+  font-size: clamp(36px, 10vmin, 100px);
+}
+
+.barn {
+  right: 4%;
+  bottom: 11%;
+  width: clamp(96px, 18vmin, 210px);
+  filter: drop-shadow(0 8px 10px rgba(74, 56, 43, 0.2));
+}
+
+.pond {
+  left: 4%;
+  bottom: 8%;
+  width: clamp(130px, 26vmin, 300px);
+}
+
+.tractor {
+  left: 37%;
+  bottom: 5.5%;
+  font-size: clamp(40px, 11vmin, 110px);
+  filter: drop-shadow(0 5px 5px rgba(74, 56, 43, 0.18));
+}
+
+.flower-a {
+  right: 27%;
+  bottom: 6%;
+  font-size: clamp(18px, 5vmin, 48px);
+}
+
+.flower-b {
+  left: 22%;
+  bottom: 5%;
+  font-size: clamp(16px, 4.5vmin, 42px);
+}
+
+.flower-c {
+  left: 55%;
+  bottom: 27%;
+  font-size: clamp(15px, 4vmin, 38px);
+}
+
+/* Landscape: raise the horizon so the grass band holds both sticker rows
+   without the sky swallowing half the screen. */
+@media (orientation: landscape) {
+  .farm-ground {
+    height: 55%;
+  }
+
+  .farm-hills,
+  .farm-meadow {
+    bottom: 55%;
+  }
+
+  .tree-a {
+    bottom: 52%;
+  }
+
+  .tree-b {
+    bottom: 53%;
+  }
+}
+
+/* emoji stickers scattered across the whole scene */
 .scene-animal {
   position: absolute;
-  width: clamp(64px, 15vmin, 104px);
-  aspect-ratio: 1;
+  z-index: 3;
+  font-size: calc(clamp(56px, 14vmin, 128px) * var(--s, 1));
+  line-height: 1;
   transform: translate(-50%, -50%) rotate(var(--tilt, 0deg));
-  overflow: hidden;
-  border-radius: 26%;
-  border: 3px solid var(--card);
-  box-shadow: 0 12px 24px -12px rgba(74, 56, 43, 0.55);
-  transition: transform 0.2s var(--ease), border-color 0.2s;
-}
-
-.scene-animal img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  filter: drop-shadow(0 5px 6px rgba(74, 56, 43, 0.28));
+  transition: transform 0.2s var(--ease);
 }
 
 .scene-animal:active:not(.found) {
-  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(0.92);
+  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(0.9);
 }
 
 .scene-animal.found {
-  border-color: var(--gold);
   animation: found-pop 0.6s var(--ease);
 }
 
 @keyframes found-pop {
   40% {
-    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.18);
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.22);
+    filter: drop-shadow(0 0 12px rgba(232, 161, 60, 0.9));
   }
 }
 
@@ -1208,10 +1346,10 @@ input[type='range'] {
 
 @keyframes scene-shake {
   25% {
-    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(-5px);
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(-6px);
   }
   75% {
-    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(5px);
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(6px);
   }
 }
 
@@ -1221,8 +1359,8 @@ input[type='range'] {
 
 @keyframes hint-pulse {
   50% {
-    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.1);
-    box-shadow: 0 0 0 8px rgba(232, 161, 60, 0.4);
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.12);
+    filter: drop-shadow(0 0 10px rgba(232, 161, 60, 0.95)) drop-shadow(0 5px 6px rgba(74, 56, 43, 0.25));
   }
 }
 
