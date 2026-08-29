@@ -16,9 +16,12 @@ type Pending = {
 class AudioEngine {
   private clips = new Map<string, HTMLAudioElement>()
   private pendingSound: Pending | null = null
+  private didUnlock = false
 
   /** Must be called from a user gesture: unlocks audio + speech on iOS. */
   unlock() {
+    if (this.didUnlock) return
+    this.didUnlock = true
     try {
       const Ctx: typeof AudioContext | undefined =
         window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
@@ -109,12 +112,28 @@ class AudioEngine {
         }
         u.rate = cfg.rate
         u.pitch = 1.05
-        u.onend = () => resolve()
-        u.onerror = (e) => {
-          if (e.error === 'interrupted' || e.error === 'canceled') reject(new Error('stopped'))
-          else resolve() // speak anyway; a bad voice shouldn't break the slide
+        let settled = false
+        const settle = () => {
+          if (settled) return
+          settled = true
+          window.clearTimeout(failsafe)
+          resolve()
         }
-        speechSynthesis.cancel()
+        const stop = () => {
+          if (settled) return
+          settled = true
+          window.clearTimeout(failsafe)
+          reject(new Error('stopped'))
+        }
+        // Some platforms (notably iOS after a cancel) drop the utterance
+        // without ever firing end/error — never let the caller hang.
+        const failsafe = window.setTimeout(settle, 6000)
+        u.onend = settle
+        u.onerror = (e) => {
+          if (e.error === 'interrupted' || e.error === 'canceled') stop()
+          else settle() // a bad voice shouldn't break the flow
+        }
+        if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel()
         speechSynthesis.speak(u)
       } catch (err) {
         reject(err instanceof Error ? err : new Error('speech failed'))

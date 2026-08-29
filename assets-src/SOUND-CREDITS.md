@@ -8,7 +8,7 @@ All clips sourced from Wikimedia Commons. Files keep their original formats; con
 - horse: "Wiehern.ogg" by Hü. — Public domain — https://commons.wikimedia.org/wiki/File:Wiehern.ogg
 - pig: "618483 foleyhaven piglet-squeal-01.flac" by Foleyhaven — CC0 — https://commons.wikimedia.org/wiki/File:618483_foleyhaven_piglet-squeal-01.flac
 - sheep: "Sheep bleating.ogg" by earthcalling — Public domain — https://commons.wikimedia.org/wiki/File:Sheep_bleating.ogg
-- duck: "Domestic duck sound 01.wav" by Ganesh Mohan T — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Domestic_duck_sound_01.wav
+- duck: Sound Effect by <a href="https://pixabay.com/users/ribhavagrawal-39286533/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=293316">Ribhav Agrawal</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=293316">Pixabay</a>
 - chicken: "Hen announcing shes lain an egg.ogg" by alys — Public domain — https://commons.wikimedia.org/wiki/File:Hen_announcing_shes_lain_an_egg.ogg
 - goat: "Herd of goats bleating.ogg" by stephan — Public domain — https://commons.wikimedia.org/wiki/File:Herd_of_goats_bleating.ogg
 - rabbit: "Sounds of a rollicking House Rabbit.flac" by Fiver, der Hellseher — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Sounds_of_a_rollicking_House_Rabbit.flac

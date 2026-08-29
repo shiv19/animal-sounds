@@ -8,9 +8,10 @@ interface Props {
   onChange: (patch: Partial<Settings>) => void
   voices: SpeechSynthesisVoice[]
   onClose: () => void
+  onHome: () => void
 }
 
-export default function SettingsSheet({ settings, onChange, voices, onClose }: Props) {
+export default function SettingsSheet({ settings, onChange, voices, onClose, onHome }: Props) {
   const englishVoices = voices.filter((v) => v.lang.toLowerCase().startsWith('en'))
   const testVoice = () => void engine.speak('Cow says moo', settings)
   const [isFullscreen, setIsFullscreen] = useState(isFullscreenActive)
@@ -123,6 +124,10 @@ export default function SettingsSheet({ settings, onChange, voices, onClose }: P
             {isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
           </button>
         )}
+
+        <button className="primary-btn" onClick={onHome}>
+          Back to home
+        </button>
       </div>
     </div>
   )

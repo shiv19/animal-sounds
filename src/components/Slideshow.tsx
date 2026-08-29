@@ -16,9 +16,10 @@ interface Props {
   onSettingsChange: (s: Settings) => void
   favorites: string[]
   onToggleFavorite: (id: string) => void
+  onHome: () => void
 }
 
-export default function Slideshow({ settings, onSettingsChange, favorites, onToggleFavorite }: Props) {
+export default function Slideshow({ settings, onSettingsChange, favorites, onToggleFavorite, onHome }: Props) {
   // One shuffled deck per visit, so the order feels fresh without repeating.
   const orderRef = useRef<AnimalAssets[]>(shuffled(ANIMALS))
   const [index, setIndex] = useState(0)
@@ -189,6 +190,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
           onChange={(patch) => onSettingsChange({ ...settings, ...patch })}
           voices={voices}
           onClose={() => setSettingsOpen(false)}
+          onHome={onHome}
         />
       )}
     </div>
