@@ -287,6 +287,9 @@ function FarmScene() {
       {/* mud puddle */}
       <ellipse cx="1060" cy="930" rx="115" ry="34" fill="#b99b72" />
       <ellipse cx="1040" cy="922" rx="46" ry="13" fill="#c9ad88" />
+      {/* hay bale */}
+      <rect x="1462" y="856" width="96" height="64" rx="12" fill="#d9b36b" />
+      <path d="M1462 888h96M1510 856v64" stroke="#c49c50" strokeWidth="6" />
       {/* flowers + tufts */}
       <g fill="#f2a2b6">
         <circle cx="480" cy="905" r="9" />
