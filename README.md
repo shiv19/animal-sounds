@@ -46,18 +46,11 @@ Recorded names beat synthetic speech for little ears. To add them later:
 
 ## Deployment
 
-The app is built to live under `shiv19.com/animal-sounds` (the Vite `base` and the
-service-worker scope are already set to `/animal-sounds/`).
-
-```bash
-npm run build      # outputs dist/
-# copy the contents of dist/ to your blog's /animal-sounds/ directory
-```
-
-- All asset URLs are relative to `/animal-sounds/`, so no other config is needed.
-- The service worker is scoped to `/animal-sounds/`, so it won't interfere with
-  the rest of your site (even if the blog has its own service worker).
-- First visit needs network; every visit after that is fully offline.
+Fully automatic: every push to `main` runs a GitHub Actions workflow that builds
+the app and deploys it to GitHub Pages at https://shiv19.com/animal-sounds (the
+Vite `base` and the service-worker scope are set to `/animal-sounds/`). Check
+the repo's Actions tab for deploy status. Devices that already opened the app
+pick up updates on their next visit or two (service-worker update cycle).
 
 ## Asset licenses
 
