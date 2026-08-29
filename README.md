@@ -30,7 +30,7 @@ npm run preview    # serve the production build locally
 
 1. Drop a photo into `assets-src/photos/<id>.jpg` (≥800px, square-croppable)
 2. Drop a sound into `assets-src/sounds/<id>.<mp3|ogg|wav|flac>` (1–15s ideal;
-   clips are auto-trimmed to 8s with a fade, and leading silence is skipped)
+   silence at both ends is trimmed automatically, clips are capped at 8s with a fade)
 3. Add an entry to `src/data/animals.ts` (id, name, category, accent color)
 4. `npm run assets` — regenerates the optimized WebP photos and MP3 sounds
 5. Add a credits line to `assets-src/PHOTO-CREDITS.md` / `SOUND-CREDITS.md`

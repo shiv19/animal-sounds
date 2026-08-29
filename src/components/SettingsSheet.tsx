@@ -101,7 +101,7 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
               <option value="">Device default</option>
               {englishVoices.map((v) => (
                 <option key={v.voiceURI} value={v.voiceURI}>
-                  {v.name} ({v.lang})
+                  {v.name} ({v.lang}){v.localService ? '' : ' — network'}
                 </option>
               ))}
             </select>
@@ -109,6 +109,7 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
               Test
             </button>
           </div>
+          <p className="field-note">Local voices are the most reliable; network voices may fail silently.</p>
         </div>
 
         <div className="field">

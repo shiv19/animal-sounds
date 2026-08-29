@@ -6,7 +6,7 @@
  *
  * Idempotent: skips outputs that are newer than their source.
  */
-import { execFileSync, spawnSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -22,22 +22,17 @@ mkdirSync(outSounds, { recursive: true })
 const newer = (src, dst) => !existsSync(dst) || statSync(src).mtimeMs > statSync(dst).mtimeMs
 
 /**
- * Long field recordings often start with silence. Find where the sound
- * actually begins so the 8s excerpt captures the good part.
+ * Trim silence from both ends (keeping a small natural pad), cap at 8s and
+ * fade the tail so nothing ends abruptly.
  */
-function detectSoundStart(src) {
-  const res = spawnSync(
-    'ffmpeg',
-    ['-i', src, '-af', 'silencedetect=noise=-45dB:d=0.25', '-f', 'null', '-'],
-    { encoding: 'utf8' }
-  )
-  const events = [...res.stderr.matchAll(/silence_(start|end): ([\d.]+)/g)]
-  if (events.length > 0 && events[0][1] === 'start' && parseFloat(events[0][2]) < 0.5) {
-    const end = events.find((e) => e[1] === 'end')
-    if (end) return Math.max(0, parseFloat(end[2]) - 0.05)
-  }
-  return 0
+function soundFilterArgs() {
+  const trimEnd = (keep) =>
+    `silenceremove=start_periods=1:start_threshold=-45dB:start_silence=${keep}`
+  const lead = trimEnd(0.05)
+  const tail = `areverse,${trimEnd(0.2)},areverse`
+  return ['-af', `${lead},${tail},afade=t=out:st=7.3:d=0.7`, '-t', '8']
 }
+
 
 let photos = 0
 if (existsSync(srcPhotos)) {
@@ -70,21 +65,17 @@ if (existsSync(srcSounds)) {
     const src = join(srcSounds, file)
     const dst = join(outSounds, `${id}.mp3`)
     if (!newer(src, dst)) continue
-    const offset = detectSoundStart(src)
-    const seek = offset > 0.1 ? ['-ss', offset.toFixed(2)] : []
     execFileSync('ffmpeg', [
       '-y',
-      ...seek,
       '-i', src,
-      '-t', '8',
-      '-af', 'afade=t=out:st=7.3:d=0.7',
+      ...soundFilterArgs(),
       '-ar', '44100',
       '-ac', '1',
       '-b:a', '96k',
       '-map_metadata', '-1',
       dst
     ], { stdio: 'pipe' })
-    console.log(`sound: ${id}.mp3${offset > 0.1 ? ` (from ${offset.toFixed(1)}s)` : ''}`)
+    console.log(`sound: ${id}.mp3`)
     sounds++
   }
 }
