@@ -39,8 +39,9 @@ class AudioEngine {
       /* audio unlock is best-effort */
     }
     try {
-      const warm = new SpeechSynthesisUtterance(' ')
-      warm.volume = 0
+      const warm = new SpeechSynthesisUtterance('hello')
+      warm.volume = 0.05
+      warm.rate = 2
       speechSynthesis.speak(warm)
     } catch {
       /* speech unsupported */
@@ -112,29 +113,53 @@ class AudioEngine {
         }
         u.rate = cfg.rate
         u.pitch = 1.05
+
         let settled = false
+        let started = false
+        let watchdog = 0
         const settle = () => {
           if (settled) return
           settled = true
           window.clearTimeout(failsafe)
+          window.clearTimeout(watchdog)
           resolve()
         }
         const stop = () => {
           if (settled) return
           settled = true
           window.clearTimeout(failsafe)
+          window.clearTimeout(watchdog)
           reject(new Error('stopped'))
         }
-        // Some platforms (notably iOS after a cancel) drop the utterance
-        // without ever firing end/error — never let the caller hang.
-        const failsafe = window.setTimeout(settle, 6000)
+        // Hard cap: some engines drop utterances without ever firing events,
+        // and the flow must never wait on a voice that will not come.
+        const failsafe = window.setTimeout(settle, 8000)
+        u.onstart = () => {
+          started = true
+          window.clearTimeout(watchdog)
+        }
         u.onend = settle
         u.onerror = (e) => {
           if (e.error === 'interrupted' || e.error === 'canceled') stop()
           else settle() // a bad voice shouldn't break the flow
         }
-        if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel()
-        speechSynthesis.speak(u)
+
+        // Engines are flaky in well-known ways: Chrome freezes its queue until
+        // cancel()+resume(), and iOS can silently swallow a speak() that
+        // follows a cancel. Clear the queue, nudge, and retry if the
+        // utterance never actually started.
+        const attempt = (tries: number) => {
+          if (settled) return
+          speechSynthesis.cancel()
+          speechSynthesis.speak(u)
+          speechSynthesis.resume()
+          watchdog = window.setTimeout(() => {
+            if (settled || started) return
+            if (tries < 2) attempt(tries + 1)
+            else settle() // silent failure beats stalling the flow
+          }, 450)
+        }
+        attempt(0)
       } catch (err) {
         reject(err instanceof Error ? err : new Error('speech failed'))
       }

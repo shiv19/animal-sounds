@@ -28,6 +28,8 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
   const [pop, setPop] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const voices = useVoices()
+  const [introDone, setIntroDone] = useState(false)
+  const [pageVisible, setPageVisible] = useState(() => !document.hidden)
 
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
   const deck = useMemo(
@@ -60,6 +62,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
   useEffect(() => {
     if (!current) return
     let cancelled = false
+    setIntroDone(false)
     const run = async () => {
       engine.stopAll()
       try {
@@ -79,6 +82,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
       } catch {
         /* aborted by navigation or a missing clip — stay quiet on this slide */
       }
+      if (!cancelled) setIntroDone(true)
     }
     void run()
     return () => {
@@ -87,17 +91,18 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
     }
   }, [current, replayNonce, settings.sequence, settings.rate, settings.voiceURI])
 
-  // Auto-advance: reset on every slide change and replay tap; paused while
-  // settings are open.
+  // Auto-advance: play the full sound + name, pause for the configured gap,
+  // then move on. Paused while settings are open or the app is hidden.
   useEffect(() => {
-    if (settings.mode !== 'auto' || settingsOpen || !current) return
+    if (settings.mode !== 'auto' || settingsOpen || !pageVisible || !current || !introDone) return
     const t = window.setTimeout(() => go(1), settings.autoSeconds * 1000)
     return () => window.clearTimeout(t)
-  }, [index, replayNonce, settings.mode, settings.autoSeconds, settingsOpen, go, current])
+  }, [index, replayNonce, introDone, settings.mode, settings.autoSeconds, settingsOpen, pageVisible, go, current])
 
-  // Silence when the app goes to the background.
+  // Silence + pause when the app goes to the background.
   useEffect(() => {
     const onVisibility = () => {
+      setPageVisible(!document.hidden)
       if (document.hidden) engine.stopAll()
     }
     document.addEventListener('visibilitychange', onVisibility)

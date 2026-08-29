@@ -485,6 +485,13 @@ button {
   color: var(--ink-soft);
 }
 
+.field-note {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
 .seg {
   display: flex;
   gap: 4px;

@@ -52,16 +52,20 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
 
         {settings.mode === 'auto' && (
           <div className="field">
-            <label>Auto-advance speed</label>
+            <label>Pause after each animal</label>
             <Segment
               value={String(settings.autoSeconds)}
               onChange={(v) => onChange({ autoSeconds: Number(v) })}
               options={[
-                { v: '10', label: 'Slow · 10s' },
-                { v: '7', label: 'Normal · 7s' },
-                { v: '4', label: 'Quick · 4s' }
+                { v: '1', label: 'Short · 1s' },
+                { v: '2', label: 'Normal · 2s' },
+                { v: '4', label: 'Long · 4s' }
               ]}
             />
+            <p className="field-note">
+              The full sound and name always play first, then the slide waits this long before
+              moving on.
+            </p>
           </div>
         )}
 

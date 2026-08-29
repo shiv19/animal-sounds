@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ANIMALS } from './data/animals'
 import { engine } from './lib/audio'
 import { useFavorites, useSettings } from './lib/storage'
@@ -29,6 +29,16 @@ export default function App() {
     if (isFullscreenActive()) void toggleFullscreen()
     setPhase('home')
   }
+
+  // Desktop testing convenience: Esc leaves any mode.
+  useEffect(() => {
+    if (phase === 'home') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') goHome()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
 
   if (phase === 'home') {
     return (
