@@ -1131,6 +1131,121 @@ input[type='range'] {
   margin-right: 4px;
 }
 
+/* ---------- find it ---------- */
+
+.findit-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  z-index: 3;
+}
+
+.find-chip {
+  background: var(--gold);
+  color: var(--card);
+  font-size: 17px;
+  box-shadow: 0 10px 24px -12px rgba(74, 56, 43, 0.5);
+}
+
+.findit-scene {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border-radius: clamp(18px, 4vmin, 28px);
+  overflow: hidden;
+  background: #c9e0ee;
+  box-shadow: 0 24px 48px -22px rgba(74, 56, 43, 0.45);
+}
+
+.findit-scene > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scene-animal {
+  position: absolute;
+  width: clamp(64px, 15vmin, 104px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg));
+  overflow: hidden;
+  border-radius: 26%;
+  border: 3px solid var(--card);
+  box-shadow: 0 12px 24px -12px rgba(74, 56, 43, 0.55);
+  transition: transform 0.2s var(--ease), border-color 0.2s;
+}
+
+.scene-animal img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scene-animal:active:not(.found) {
+  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(0.92);
+}
+
+.scene-animal.found {
+  border-color: var(--gold);
+  animation: found-pop 0.6s var(--ease);
+}
+
+@keyframes found-pop {
+  40% {
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.18);
+  }
+}
+
+.scene-animal.wrong {
+  animation: scene-shake 0.4s var(--ease);
+}
+
+@keyframes scene-shake {
+  25% {
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(-5px);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) translateX(5px);
+  }
+}
+
+.scene-animal.hint {
+  animation: hint-pulse 1.3s var(--ease) infinite;
+}
+
+@keyframes hint-pulse {
+  50% {
+    transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1.1);
+    box-shadow: 0 0 0 8px rgba(232, 161, 60, 0.4);
+  }
+}
+
+.round-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.round-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(74, 56, 43, 0.18);
+}
+
+.round-dots .dot.now {
+  background: rgba(74, 56, 43, 0.45);
+}
+
+.round-dots .dot.on {
+  background: var(--gold);
+}
+
 /* ---------- motion preferences ---------- */
 
 @media (prefers-reduced-motion: reduce) {

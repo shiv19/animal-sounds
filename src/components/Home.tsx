@@ -5,9 +5,10 @@ interface Props {
   onMemory: () => void
   onQuiz: () => void
   onGallery: () => void
+  onFindIt: () => void
 }
 
-export default function Home({ onSlideshow, onMemory, onQuiz, onGallery }: Props) {
+export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindIt }: Props) {
   return (
     <div className="splash home">
       <div className="splash-washes" aria-hidden>
@@ -74,6 +75,19 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery }: Props
             <small>Explore all animals</small>
           </span>
         </button>
+        <button
+          className="menu-card"
+          style={{ '--card-accent': '#a277c9' } as CSSProperties}
+          onClick={onFindIt}
+        >
+          <span className="menu-icon">
+            <FindIcon />
+          </span>
+          <span className="menu-text">
+            <strong>Find it!</strong>
+            <small>Where is it?</small>
+          </span>
+        </button>
       </div>
       <p className="hint">Best with the sound turned up</p>
       <p className="hint parent-hint">
@@ -133,6 +147,15 @@ export function GalleryIcon() {
       <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
       <circle cx="9" cy="9.5" r="1.6" />
       <path d="M6 17.5l4.2-4.7 3.3 3.7 2.7-3 3.3 4" />
+    </svg>
+  )
+}
+
+export function FindIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="m15.5 15.5 4.5 4.5" />
     </svg>
   )
 }

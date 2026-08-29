@@ -8,8 +8,9 @@ import Slideshow from './components/Slideshow'
 import MemoryGame from './components/MemoryGame'
 import QuizGame from './components/QuizGame'
 import Gallery from './components/Gallery'
+import FindIt from './components/FindIt'
 
-type Phase = 'home' | 'slideshow' | 'memory' | 'quiz' | 'gallery'
+type Phase = 'home' | 'slideshow' | 'memory' | 'quiz' | 'gallery' | 'findit'
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>('home')
@@ -48,8 +49,13 @@ export default function App() {
         onMemory={() => enter('memory')}
         onQuiz={() => enter('quiz')}
         onGallery={() => enter('gallery')}
+        onFindIt={() => enter('findit')}
       />
     )
+  }
+
+  if (phase === 'findit') {
+    return <FindIt settings={settings} favorites={favorites} onHome={goHome} />
   }
 
   if (phase === 'gallery') {

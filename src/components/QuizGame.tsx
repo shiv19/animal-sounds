@@ -247,7 +247,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
   )
 }
 
-function SpeakerIcon() {
+export function SpeakerIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden>
       <path
