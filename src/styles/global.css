@@ -1152,9 +1152,9 @@ input[type='range'] {
 .findit-scene {
   position: relative;
   width: 100%;
-  /* fixed aspect so every scene element stays visible at any screen size */
-  max-width: calc((100dvh - 200px) * 16 / 11);
-  aspect-ratio: 16 / 11;
+  /* fixed aspect matching the SVG (16:10) so nothing is ever cropped */
+  max-width: calc((100dvh - 200px) * 1.6);
+  aspect-ratio: 16 / 10;
   border-radius: clamp(18px, 4vmin, 28px);
   overflow: hidden;
   background: #c9e0ee;
