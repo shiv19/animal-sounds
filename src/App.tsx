@@ -7,8 +7,9 @@ import Home from './components/Home'
 import Slideshow from './components/Slideshow'
 import MemoryGame from './components/MemoryGame'
 import QuizGame from './components/QuizGame'
+import Gallery from './components/Gallery'
 
-type Phase = 'home' | 'slideshow' | 'memory' | 'quiz'
+type Phase = 'home' | 'slideshow' | 'memory' | 'quiz' | 'gallery'
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>('home')
@@ -46,8 +47,13 @@ export default function App() {
         onSlideshow={() => enter('slideshow')}
         onMemory={() => enter('memory')}
         onQuiz={() => enter('quiz')}
+        onGallery={() => enter('gallery')}
       />
     )
+  }
+
+  if (phase === 'gallery') {
+    return <Gallery settings={settings} onHome={goHome} />
   }
 
   if (phase === 'memory') {
