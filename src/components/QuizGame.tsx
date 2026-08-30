@@ -41,7 +41,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const seqRef = useRef(0)
   const nextTimer = useRef(0)
-  const scratch = useRef({ down: false, moves: 0 })
+  const scratch = useRef({ down: false, moves: 0, last: null as { x: number; y: number } | null })
 
   const { answer, options } = question
 
@@ -138,15 +138,31 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
     const dpr = canvas.width / rect.width
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+    const x = (clientX - rect.left) * dpr
+    const y = (clientY - rect.top) * dpr
+    const r = (rect.width / 11) * dpr
     ctx.globalCompositeOperation = 'destination-out'
+    // A small brush leaves dotted gaps when the pointer moves fast, so bridge
+    // consecutive points with a round-capped stroke instead of stamping alone.
+    ctx.lineCap = 'round'
+    ctx.lineWidth = r * 2
+    const last = scratch.current.last
+    if (last) {
+      ctx.beginPath()
+      ctx.moveTo(last.x, last.y)
+      ctx.lineTo(x, y)
+      ctx.stroke()
+    }
     ctx.beginPath()
-    ctx.arc((clientX - rect.left) * dpr, (clientY - rect.top) * dpr, (rect.width / 7) * dpr, 0, Math.PI * 2)
+    ctx.arc(x, y, r, 0, Math.PI * 2)
     ctx.fill()
+    scratch.current.last = { x, y }
     if (++scratch.current.moves % 10 === 0) checkRevealed()
   }
 
   const onDown = (e: ReactPointerEvent<HTMLCanvasElement>) => {
     scratch.current.down = true
+    scratch.current.last = null
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
     } catch {
@@ -161,6 +177,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
 
   const onUp = () => {
     scratch.current.down = false
+    scratch.current.last = null
   }
 
   const nextQuestion = () => {
