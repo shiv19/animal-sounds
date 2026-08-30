@@ -9,9 +9,9 @@ type Pending = {
 }
 
 /**
- * Tiny audio engine: bundled animal-sound clips via HTMLAudioElement plus
- * spoken names via the Web Speech API. All playback goes through here so a
- * recorded-voice provider can later replace speak() without touching the UI.
+ * Tiny audio engine: bundled clips via HTMLAudioElement plus spoken names
+ * (recorded voice clip when available, browser TTS as fallback). All playback
+ * goes through here so neither the UI nor the modes care which path ran.
  */
 class AudioEngine {
   private clips = new Map<string, HTMLAudioElement>()
@@ -65,8 +65,14 @@ class AudioEngine {
   }
 
   playSound(src: string): Promise<void> {
+    return this.playClip(src, 1)
+  }
+
+  /** All clips share one playback slot: starting a new one stops the previous. */
+  private playClip(src: string, rate: number): Promise<void> {
     this.stopSound()
     const a = this.clip(src)
+    a.playbackRate = rate
     return new Promise<void>((resolve, reject) => {
       const cleanup = () => {
         a.removeEventListener('ended', onEnd)
@@ -99,7 +105,23 @@ class AudioEngine {
     this.pendingSound = null
   }
 
-  speak(name: string, cfg: SpeechConfig): Promise<void> {
+  /**
+   * Speak a name or phrase. Prefers the recorded clip — one consistent voice
+   * everywhere, no TTS engine flakiness — with the rate slider applied as
+   * playbackRate (pitch-preserving). Falls back to browser TTS only when the
+   * clip is missing or fails; a 'stopped' abort propagates so navigating
+   * away never triggers the fallback.
+   */
+  speak(name: string, cfg: SpeechConfig, clip?: string): Promise<void> {
+    if (!clip) return this.speakTTS(name, cfg)
+    const rate = Math.min(Math.max(cfg.rate, 0.6), 1.2)
+    return this.playClip(clip, rate).catch((err: unknown) => {
+      if (err instanceof Error && err.message === 'stopped') throw err
+      return this.speakTTS(name, cfg)
+    })
+  }
+
+  private speakTTS(name: string, cfg: SpeechConfig): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
         if (!('speechSynthesis' in window)) return reject(new Error('speech unsupported'))

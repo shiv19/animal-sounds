@@ -8,13 +8,15 @@ gate; everything else is toddler-proof.
 ## Features
 
 - **Slideshow** of 17 animals (farm first, then wild), shuffled each visit
-- **Tap the animal** → plays the sound, then the spoken name (order and voice configurable)
+- **Tap the animal** → plays the sound, then the spoken name (order and speed configurable)
 - **Favorites** — tap the star; optional "favorites only" mode (stored per device)
 - **Auto-advance mode** with speed setting, for wind-down time
 - **Parent gate** — hold the gear for 2 seconds to open settings; settings let you
-  pick the TTS voice, speaking speed, sound order, word visibility, and fullscreen
-- **Works offline** — the service worker precaches every photo and sound (~3.5 MB);
-  after the first visit it loads instantly with no network
+  pick speaking speed, sound order, word visibility, and fullscreen
+- **Recorded voice** — all names and phrases ("Where is the cow?") play from
+  ElevenLabs voice clips; browser TTS remains only as a fallback if a clip fails
+- **Works offline** — the service worker precaches every photo, sound and voice
+  clip; after the first visit it loads instantly with no network
 - Recorded voice clips can replace TTS later without code changes (see below)
 
 ## Development
@@ -35,14 +37,25 @@ npm run preview    # serve the production build locally
 4. `npm run assets` — regenerates the optimized WebP photos and MP3 sounds
 5. Add a credits line to `assets-src/PHOTO-CREDITS.md` / `SOUND-CREDITS.md`
 
-## Using a recorded voice instead of TTS
+## Voice recordings
 
-Recorded names beat synthetic speech for little ears. To add them later:
+Names and phrases are real recorded clips (ElevenLabs `eleven_multilingual_v2`,
+the voice configured via `ELEVENLABS_VOICE_ID`), not live TTS. The tooling lives
+in `localscripts/` (gitignored; needs `sag` and `ELEVENLABS_API_KEY` in the
+environment):
 
-1. Record ~1s clips of each name ("Cow!") as `public/animals/voices/<id>.mp3`
-2. Set `recording` on the animal in `src/data/animals.ts`
-3. Play it in `src/lib/audio.ts` from `playIntro` when `animal.recording` exists —
-   all playback already goes through the `AudioEngine`, so it's a small change.
+- `gen-names.sh` — generates every name + phrase take into `localscripts/raw/`
+  (`SEED=42 ./gen-names.sh` retakes with a different seed; existing takes are skipped)
+- `process-names.sh` — trims silence, pads 60/150ms, and loudness-matches every
+  clip to −15 LUFS (the animal-sound clips measure ≈ −14..−15.5), peaks capped
+  at −1.5 dBTP; writes into `public/animals/{names,phrases}/`
+- `qa-names.py` — transcribes every processed clip with whisper `small.en`
+  (beam search, temperature 0; single greedy decodes flip vowels on sub-second
+  words) and fails on any mismatch
+
+`src/lib/audio.ts` plays `animal.recording` / `phraseClip(...)` when present and
+falls back to browser TTS if a clip fails to load, so a missing file never
+silences a mode.
 
 ## Deployment
 

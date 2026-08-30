@@ -21,7 +21,7 @@ export default function App() {
   // fullscreen for an immersive experience in every mode.
   const enter = (next: Phase) => {
     engine.unlock()
-    engine.preload(ANIMALS.map((a) => a.sound))
+    engine.preload([...ANIMALS.map((a) => a.sound), ...ANIMALS.map((a) => a.recording ?? '')].filter(Boolean))
     if (supportsFullscreen() && !isFullscreenActive()) void toggleFullscreen()
     setPhase(next)
   }

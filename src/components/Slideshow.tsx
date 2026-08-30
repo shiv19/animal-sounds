@@ -67,7 +67,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
       engine.stopAll()
       try {
         if (settings.sequence === 'name-first') {
-          await engine.speak(current.name, settings)
+          await engine.speak(current.name, settings, current.recording)
           if (cancelled) return
           await wait(250)
           if (cancelled) return
@@ -77,7 +77,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
           if (cancelled) return
           await wait(300)
           if (cancelled) return
-          await engine.speak(current.name, settings)
+          await engine.speak(current.name, settings, current.recording)
         }
       } catch {
         /* aborted by navigation or a missing clip — stay quiet on this slide */

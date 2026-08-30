@@ -12,6 +12,10 @@ export interface Animal {
 
 const photo = (id: string) => `${import.meta.env.BASE_URL}animals/photos/${id}.webp`
 const sound = (id: string) => `${import.meta.env.BASE_URL}animals/sounds/${id}.mp3`
+const nameClip = (id: string) => `${import.meta.env.BASE_URL}animals/names/${id}.mp3`
+
+/** Recorded phrase clips ("Where is the cow?", "Yes! Cow!") in the same voice as the names. */
+export const phraseClip = (slug: string) => `${import.meta.env.BASE_URL}animals/phrases/${slug}.mp3`
 
 const defs: Array<Animal> = [
   // Farm first — the words toddlers say earliest
@@ -38,7 +42,7 @@ const defs: Array<Animal> = [
 export interface AnimalAssets extends Animal {
   photo: string
   sound: string
-  /** Future: path to a recorded voice clip, spoken instead of TTS when present */
+  /** Recorded name clip, spoken instead of browser TTS when present */
   recording?: string
 }
 
@@ -46,5 +50,5 @@ export const ANIMALS: AnimalAssets[] = defs.map((a) => ({
   ...a,
   photo: photo(a.id),
   sound: sound(a.id),
-  recording: undefined
+  recording: nameClip(a.id)
 }))

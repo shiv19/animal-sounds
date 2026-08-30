@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { engine } from '../lib/audio'
 import { isFullscreenActive, supportsFullscreen, toggleFullscreen } from '../lib/voices'
+import { phraseClip } from '../data/animals'
 import type { Settings } from '../lib/storage'
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 
 export default function SettingsSheet({ settings, onChange, voices, onClose, onHome }: Props) {
   const englishVoices = voices.filter((v) => v.lang.toLowerCase().startsWith('en'))
-  const testVoice = () => void engine.speak('Cow says moo', settings)
+  const testVoice = () => void engine.speak('Cow says moo', settings, phraseClip('test'))
   const [isFullscreen, setIsFullscreen] = useState(isFullscreenActive)
 
   // Fullscreen can also change outside this sheet (e.g. the start tap), so
@@ -109,7 +110,10 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
               Test
             </button>
           </div>
-          <p className="field-note">Local voices are the most reliable; network voices may fail silently.</p>
+          <p className="field-note">
+            Words play from a recorded voice. This picker only applies if a recording fails to load,
+            in which case the browser reads the words instead.
+          </p>
         </div>
 
         <div className="field">

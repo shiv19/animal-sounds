@@ -37,7 +37,7 @@ export default function Gallery({ settings, onHome }: Props) {
       try {
         await engine.playSound(animal.sound)
         if (seqRef.current !== my) return
-        await engine.speak(animal.name, settings)
+        await engine.speak(animal.name, settings, animal.recording)
       } catch {
         /* aborted by a newer tap */
       }

@@ -19,3 +19,9 @@ All clips sourced from Wikimedia Commons. Files keep their original formats; con
 - bear: "Bear growl.ogg" by Shizhao — CC BY 3.0 — https://commons.wikimedia.org/wiki/File:Bear_growl.ogg
 - frog: "Single Frog Croak.oga" by MichaeltheFox8621 — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Single_Frog_Croak.oga
 - owl: "Strix aluco - Tawny Owl XC500920.mp3" by Alvaro Ortiz Troncoso (xeno-canto XC500920) — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Strix_aluco_-_Tawny_Owl_XC500920.mp3
+
+## Voice clips (names & phrases)
+
+`public/animals/names/*` and `public/animals/phrases/*` are generated speech
+(ElevenLabs, `eleven_multilingual_v2`, premade voice "Laura"), trimmed and
+loudness-matched for the app.

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent } from 'react'
-import { ANIMALS } from '../data/animals'
+import { ANIMALS, phraseClip } from '../data/animals'
 import type { AnimalAssets } from '../data/animals'
 import { engine } from '../lib/audio'
 import type { Settings } from '../lib/storage'
@@ -173,7 +173,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
     if (solved) return
     if (id !== answer.id) {
       setWrongPick(id)
-      void engine.speak('Try again', settings).catch(() => {})
+      void engine.speak('Try again', settings, phraseClip('try-again')).catch(() => {})
       return
     }
     setSolved(true)
@@ -192,7 +192,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
     void (async () => {
       try {
         await engine.playSound(answer.sound)
-        await engine.speak(`Yes! ${answer.name}!`, settings)
+        await engine.speak(`Yes! ${answer.name}!`, settings, phraseClip(`yes-${answer.id}`))
       } catch {
         /* aborted */
       }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ANIMALS } from '../data/animals'
+import { ANIMALS, phraseClip } from '../data/animals'
 import type { AnimalAssets } from '../data/animals'
 import { engine, wait } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
@@ -102,7 +102,7 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
           if (seqRef.current !== my) return
           await wait(250)
           if (seqRef.current !== my) return
-          await engine.speak(`Where is the ${animal.name}?`, settings)
+          await engine.speak(`Where is the ${animal.name}?`, settings, phraseClip(`where-${animal.id}`))
         } catch {
           /* aborted */
         }
@@ -139,14 +139,14 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
       try {
         await engine.playSound(animal.sound)
         if (seqRef.current !== my) return
-        await engine.speak(`Yes! ${animal.name}!`, settings)
+        await engine.speak(`Yes! ${animal.name}!`, settings, phraseClip(`yes-${animal.id}`))
       } catch {
         /* aborted */
       }
       if (seqRef.current !== my) return
       if (round + 1 >= ROUNDS) {
         setWon(true)
-        void engine.speak('You found them all!', settings).catch(() => {})
+        void engine.speak('You found them all!', settings, phraseClip('found-all')).catch(() => {})
       } else {
         setRound((r) => r + 1)
       }

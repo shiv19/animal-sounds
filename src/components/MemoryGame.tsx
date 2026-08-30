@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ANIMALS } from '../data/animals'
+import { ANIMALS, phraseClip } from '../data/animals'
 import type { AnimalAssets } from '../data/animals'
 import { engine } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
@@ -118,7 +118,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
       setPhase('won')
       // let the last match's sound + name finish before cheering
       const t = window.setTimeout(() => {
-        void engine.speak('Great job!', settings).catch(() => {})
+          void engine.speak('Great job!', settings, phraseClip('great-job')).catch(() => {})
       }, 2400)
       return () => window.clearTimeout(t)
     }
@@ -151,7 +151,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
         void (async () => {
           try {
             await engine.playSound(animal.sound)
-            await engine.speak(animal.name, settings)
+            await engine.speak(animal.name, settings, animal.recording)
           } catch {
             /* aborted */
           }
