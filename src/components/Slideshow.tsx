@@ -99,6 +99,33 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
     return () => window.clearTimeout(t)
   }, [index, replayNonce, introDone, settings.mode, settings.autoSeconds, settingsOpen, pageVisible, go, current])
 
+  // Keep the screen on while he's watching (e.g. propped up during a feed).
+  // Browsers auto-release the lock when the tab hides, so re-acquire on return.
+  useEffect(() => {
+    let lock: WakeLockSentinel | null = null
+    const acquire = async () => {
+      try {
+        if ('wakeLock' in navigator && !lock) lock = await navigator.wakeLock.request('screen')
+      } catch {
+        /* denied or unsupported — screen just sleeps normally */
+      }
+    }
+    const onVisibility = () => {
+      if (document.hidden) {
+        lock = null
+      } else {
+        void acquire()
+      }
+    }
+    void acquire()
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      void lock?.release()
+      lock = null
+    }
+  }, [])
+
   // Silence + pause when the app goes to the background.
   useEffect(() => {
     const onVisibility = () => {
