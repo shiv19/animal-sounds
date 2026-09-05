@@ -72,8 +72,11 @@ silences a mode.
 Fully automatic: every push to `main` runs a GitHub Actions workflow that builds
 the app and deploys it to GitHub Pages at https://shiv19.com/animal-sounds (the
 Vite `base` and the service-worker scope are set to `/animal-sounds/`). Check
-the repo's Actions tab for deploy status. Devices that already opened the app
-pick up updates on their next visit or two (service-worker update cycle).
+the repo's Actions tab for deploy status. Updates apply themselves: every build
+stamps a unique build id into `index.html` and the service-worker registration
+URL (`sw.js?v=<build-id>`), and an app that was open during a deploy reloads
+itself once the new version finishes installing — no manual refresh or second
+visit needed. Parent settings show the running build id.
 
 ## Asset licenses
 

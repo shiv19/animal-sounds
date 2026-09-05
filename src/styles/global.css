@@ -601,6 +601,12 @@ input[type='range'] {
   text-align: center;
 }
 
+.version-note {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
 /* ---------- home menu ---------- */
 
 .home .splash-paw {

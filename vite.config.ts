@@ -1,15 +1,38 @@
 import { defineConfig } from 'vite'
+import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const BASE = '/animal-sounds/'
 
+/** Unique id per build, injected into index.html as <meta name="build-id">.
+    main.tsx appends it to the sw.js URL so every deploy is a fresh,
+    uncacheable service-worker update, and parent settings can display it. */
+function buildStamp(): Plugin {
+  const stamp = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+  return {
+    name: 'build-stamp',
+    transformIndexHtml() {
+      return [
+        {
+          tag: 'meta',
+          attrs: { name: 'build-id', content: stamp },
+          injectTo: 'head'
+        }
+      ]
+    }
+  }
+}
+
 export default defineConfig({
   base: BASE,
   plugins: [
     react(),
+    buildStamp(),
     VitePWA({
       registerType: 'autoUpdate',
+      // main.tsx registers the worker itself with the build id appended.
+      injectRegister: null,
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Animal Sounds',

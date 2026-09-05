@@ -137,9 +137,16 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
         <button className="primary-btn" onClick={onHome}>
           Back to home
         </button>
+
+        <p className="field-note version-note">App version {appVersion()}</p>
       </div>
     </div>
   )
+}
+
+/** Unique id stamped into index.html at build time; changes with every deploy. */
+function appVersion(): string {
+  return document.querySelector('meta[name="build-id"]')?.getAttribute('content') ?? 'dev'
 }
 
 function Segment<T extends string>({
