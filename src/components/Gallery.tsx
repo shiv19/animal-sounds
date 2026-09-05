@@ -1,25 +1,29 @@
-import { useRef, useState } from 'react'
-import { ANIMALS } from '../data/animals'
-import type { AnimalAssets } from '../data/animals'
+import { useMemo, useRef, useState } from 'react'
+import { CATEGORIES, worldAnimals } from '../data/animals'
+import type { AnimalAssets, World } from '../data/animals'
 import { engine } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
 import type { Settings } from '../lib/storage'
 import HomeButton from './HomeButton'
 
 interface Props {
+  world: World
   settings: Settings
+  onPickWorld: () => void
   onHome: () => void
 }
 
 /** Few, large tiles per page — small fingers need big targets. */
 const PAGE_SIZE = 6
 
-export default function Gallery({ settings, onHome }: Props) {
+export default function Gallery({ world, settings, onPickWorld, onHome }: Props) {
   const seqRef = useRef(0)
-  // Shuffled on every entry, and re-shufflable on demand — so "where's the
-  // cow?" never happens in the same spot twice.
-  const [deck, setDeck] = useState(() => shuffled(ANIMALS))
+  // Shuffled on every entry and world change, and re-shufflable on demand —
+  // so "where's the cow?" never happens in the same spot twice.
+  const [nonce, setNonce] = useState(0)
   const pagesRef = useRef<HTMLDivElement | null>(null)
+
+  const deck: AnimalAssets[] = useMemo(() => shuffled(worldAnimals(world)), [world, nonce])
 
   const pages: AnimalAssets[][] = []
   for (let i = 0; i < deck.length; i += PAGE_SIZE) {
@@ -27,7 +31,7 @@ export default function Gallery({ settings, onHome }: Props) {
   }
 
   const reshuffle = () => {
-    setDeck((d) => shuffled(d))
+    setNonce((n) => n + 1)
     pagesRef.current?.scrollTo({ left: 0, behavior: 'smooth' })
   }
 
@@ -50,6 +54,20 @@ export default function Gallery({ settings, onHome }: Props) {
       <button className="chip back-chip" onClick={reshuffle}>
         <ShuffleIcon /> Shuffle
       </button>
+      <div className="filter-bar" role="tablist" aria-label="Animal worlds">
+        <button className={world === 'all' ? 'filter-chip on' : 'filter-chip'} onClick={onPickWorld}>
+          🐾 All
+        </button>
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat.id}
+            className={world === cat.id ? 'filter-chip on' : 'filter-chip'}
+            onClick={onPickWorld}
+          >
+            {cat.emoji} {cat.name}
+          </button>
+        ))}
+      </div>
       <div className="gallery-pages" ref={pagesRef}>
         {pages.map((page, pi) => (
           <div className="gallery-page" key={pi}>

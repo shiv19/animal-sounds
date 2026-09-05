@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ANIMALS, phraseClip } from '../data/animals'
-import type { AnimalAssets } from '../data/animals'
+import { categoryInfo, phraseClip, worldName, worldAnimals } from '../data/animals'
+import type { AnimalAssets, World } from '../data/animals'
 import { engine } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
 import type { Settings } from '../lib/storage'
@@ -12,46 +12,57 @@ type Level = 'easy' | 'medium' | 'hard'
 
 const LEVELS: Record<
   Level,
-  { pairs: number; cols: number; rows: number; previewMs: number; label: string; blurb: string }
+  { pairs: number; cols: number; rows: number; previewMs: number; label: string }
 > = {
-  easy: { pairs: 3, cols: 3, rows: 2, previewMs: 4000, label: 'Easy', blurb: '3 pairs' },
-  medium: { pairs: 6, cols: 3, rows: 4, previewMs: 6000, label: 'Medium', blurb: '6 pairs' },
-  hard: { pairs: 10, cols: 4, rows: 5, previewMs: 8000, label: 'Hard', blurb: '10 pairs' }
+  easy: { pairs: 3, cols: 3, rows: 2, previewMs: 4000, label: 'Easy' },
+  medium: { pairs: 6, cols: 3, rows: 4, previewMs: 6000, label: 'Medium' },
+  hard: { pairs: 10, cols: 4, rows: 5, previewMs: 8000, label: 'Hard' }
 }
 
-/** Favorite animals get picked first when there are enough of them. */
-function buildDeck(pairs: number, favorites: string[]): AnimalAssets[] {
-  const favPool = ANIMALS.filter((a) => favorites.includes(a.id))
-  const pool = favPool.length >= pairs ? shuffled(favPool) : shuffled(ANIMALS)
-  const picks = pool.slice(0, pairs)
-  return shuffled(picks.flatMap((a) => [a, a]))
+/** Favorite animals get picked first when there are enough of them; small
+    worlds (bugs!) clamp the level down to what they can fill. */
+function buildDeck(level: Level, favorites: string[], world: World): AnimalAssets[] {
+  const pool = worldAnimals(world)
+  const pairs = Math.min(LEVELS[level].pairs, pool.length)
+  const favPool = pool.filter((a) => favorites.includes(a.id))
+  const source = favPool.length >= pairs ? shuffled(favPool) : shuffled(pool)
+  return shuffled(source.slice(0, pairs).flatMap((a) => [a, a]))
 }
 
 interface Props {
+  world: World
   settings: Settings
   favorites: string[]
+  onPickWorld: () => void
   onHome: () => void
 }
 
-export default function MemoryGame({ settings, favorites, onHome }: Props) {
+export default function MemoryGame({ world, settings, favorites, onPickWorld, onHome }: Props) {
   const [level, setLevel] = useState<Level | null>(null)
   const [run, setRun] = useState(0)
+  const poolSize = worldAnimals(world).length
 
   if (!level) {
     return (
       <div className="game-screen">
         <HomeButton onHome={onHome} />
+        <button className="chip world-chip-inline" onClick={onPickWorld} aria-label="Change world">
+          {world === 'all' ? '🐾' : categoryInfo(world).emoji} {worldName(world)}
+        </button>
         <h2 className="game-title">Memory match</h2>
         <p className="game-sub">All cards show for a moment — remember them!</p>
         <div className="level-picker">
-          {(Object.keys(LEVELS) as Level[]).map((l) => (
-            <button key={l} className="level-btn" onClick={() => setLevel(l)}>
-              <strong>{LEVELS[l].label}</strong>
-              <small>
-                {LEVELS[l].blurb} · {LEVELS[l].previewMs / 1000}s to peek
-              </small>
-            </button>
-          ))}
+          {(Object.keys(LEVELS) as Level[]).map((l) => {
+            const pairs = Math.min(LEVELS[l].pairs, poolSize)
+            return (
+              <button key={l} className="level-btn" disabled={pairs < 2} onClick={() => setLevel(l)}>
+                <strong>{LEVELS[l].label}</strong>
+                <small>
+                  {pairs} pair{pairs === 1 ? '' : 's'} · {LEVELS[l].previewMs / 1000}s to peek
+                </small>
+              </button>
+            )
+          })}
         </div>
       </div>
     )
@@ -61,6 +72,7 @@ export default function MemoryGame({ settings, favorites, onHome }: Props) {
     <MemoryBoard
       key={`${level}-${run}`}
       level={level}
+      world={world}
       settings={settings}
       favorites={favorites}
       onHome={onHome}
@@ -72,6 +84,7 @@ export default function MemoryGame({ settings, favorites, onHome }: Props) {
 
 interface BoardProps {
   level: Level
+  world: World
   settings: Settings
   favorites: string[]
   onHome: () => void
@@ -79,9 +92,10 @@ interface BoardProps {
   onAgain: () => void
 }
 
-function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: BoardProps) {
+function MemoryBoard({ level, world, settings, favorites, onHome, onLevels, onAgain }: BoardProps) {
   const cfg = LEVELS[level]
-  const [deck] = useState(() => buildDeck(cfg.pairs, favorites))
+  const [deck] = useState(() => buildDeck(level, favorites, world))
+  const pairs = deck.length / 2
   const [phase, setPhase] = useState<'preview' | 'play' | 'won'>('preview')
   const [flipped, setFlipped] = useState<number[]>([])
   const [matched, setMatched] = useState<string[]>([])
@@ -114,7 +128,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
   }, [phase, cfg.previewMs])
 
   useEffect(() => {
-    if (phase === 'play' && matched.length === cfg.pairs) {
+    if (phase === 'play' && matched.length === pairs) {
       setPhase('won')
       // let the last match's sound + name finish before cheering
       const t = window.setTimeout(() => {
@@ -122,7 +136,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
       }, 2400)
       return () => window.clearTimeout(t)
     }
-  }, [phase, matched.length, cfg.pairs, settings])
+  }, [phase, matched.length, pairs, settings])
 
   const flip = (i: number) => {
     // tapping during the peek closes the preview early
@@ -177,7 +191,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
       {phase === 'preview' && <div className="banner">Remember the animals! {peekLeft}</div>}
       {phase === 'play' && (
         <div className="banner quiet">
-          {matched.length} of {cfg.pairs} pairs
+          {matched.length} of {pairs} pairs
         </div>
       )}
       <div className="mem-grid" style={{ '--cols': cfg.cols, '--ratio': cfg.cols / cfg.rows } as CSSProperties}>
@@ -197,7 +211,7 @@ function MemoryBoard({ level, settings, favorites, onHome, onLevels, onAgain }: 
           <div className="win-card">
             <StarIcon />
             <h3>You did it!</h3>
-            <p>All {cfg.pairs} pairs found</p>
+            <p>All {pairs} pairs found</p>
             <button className="primary-btn" onClick={onAgain}>
               Play again
             </button>

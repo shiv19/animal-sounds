@@ -17,3 +17,26 @@
 - bear: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/82315c2112c2.jpeg
 - frog: unknown — unverified — ReptiChip (via image search; PNG with transparency) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f1881c4cddcf.png
 - owl: unknown — unverified — Joseph Filer photography (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fb253c619236.jpg
+
+## 2026 additions
+- donkey: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/705165dafd23.jpg
+- rooster: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7b640ac436c3.jpeg
+- turkey: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/59d9ddc3888c.jpeg
+- goose: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9cbd62bfb023.jpg
+- mouse: kcthetc1 — CC0 — Wikimedia Commons (iNaturalist) — https://upload.wikimedia.org/wikipedia/commons/7/76/Mus_musculus_131536695.jpg
+- wolf: NPS/Jim Peaco — Public domain — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/d/dd/Wolf_%28ceaf48b2-2bbd-465e-8371-c9d722b2c7a4%29.jpg
+- hippo: Muhammad Mahdi Karim — CC BY-SA 4.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/f/f2/Portrait_Hippopotamus_in_the_water.jpg
+- crocodile: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8fa739b131e2.jpg
+- snake: unknown — unverified (Pixnio free-license site) — https://pixnio.com — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7e3626487ccc.jpg
+- squirrel: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e23d889de52e.jpeg
+- parrot: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cf7ba6412913.jpeg
+- peacock: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7b27532508ef.jpg
+- eagle: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0312457bc879.jpeg
+- flamingo: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4c8eb592716b.jpeg
+- penguin: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2d039670b999.jpg
+- whale: unknown — unverified — Vallarta Adventures (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c10d0bb0270.webp
+- dolphin: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d752de0e855d.jpg
+- seal: zoofanatic — CC BY 2.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/f/fd/-8975-_Harbor_seal_pup_%2827401022669%29.jpg
+- bee: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a86489b6806a.jpeg
+- cricket: unknown — unverified — Pexels (via image search; green katydid, cricket-like) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/929984924eac.jpeg
+- mosquito: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/378e427f3041.jpg

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
-import { ANIMALS } from '../data/animals'
-import type { AnimalAssets } from '../data/animals'
+import { categoryInfo, phraseClip, worldName, worldAnimals } from '../data/animals'
+import type { World } from '../data/animals'
 import { engine, wait } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
 import { useVoices } from '../lib/voices'
@@ -12,30 +12,62 @@ import ParentGate from './ParentGate'
 import SettingsSheet from './SettingsSheet'
 
 interface Props {
+  world: World
   settings: Settings
   onSettingsChange: (s: Settings) => void
   favorites: string[]
   onToggleFavorite: (id: string) => void
+  onPickWorld: () => void
   onHome: () => void
 }
 
-export default function Slideshow({ settings, onSettingsChange, favorites, onToggleFavorite, onHome }: Props) {
-  // One shuffled deck per visit, so the order feels fresh without repeating.
-  const orderRef = useRef<AnimalAssets[]>(shuffled(ANIMALS))
+export default function Slideshow({
+  world,
+  settings,
+  onSettingsChange,
+  favorites,
+  onToggleFavorite,
+  onPickWorld,
+  onHome
+}: Props) {
+  // One shuffled deck per world visit, so the order feels fresh without repeating.
+  const favoritesSet = useMemo(() => new Set(favorites), [favorites])
+  const deck = useMemo(() => {
+    const pool = worldAnimals(world)
+    return shuffled(settings.favoritesOnly ? pool.filter((a) => favoritesSet.has(a.id)) : pool)
+  }, [world, settings.favoritesOnly, favoritesSet])
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<'next' | 'prev'>('next')
   const [replayNonce, setReplayNonce] = useState(0)
   const [pop, setPop] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const voices = useVoices()
-  const [introDone, setIntroDone] = useState(false)
   const [pageVisible, setPageVisible] = useState(() => !document.hidden)
 
-  const favoritesSet = useMemo(() => new Set(favorites), [favorites])
-  const deck = useMemo(
-    () => (settings.favoritesOnly ? orderRef.current.filter((a) => favoritesSet.has(a.id)) : orderRef.current),
-    [settings.favoritesOnly, favoritesSet]
-  )
+  // A picked world gets a spoken hello before the first animal.
+  const greetingCat = world === 'all' ? null : categoryInfo(world)
+  const greetingClip = greetingCat ? phraseClip(`intro-${greetingCat.id}`) : null
+  const [greeted, setGreeted] = useState(greetingClip === null)
+
+  useEffect(() => {
+    if (!greetingCat || !greetingClip) return
+    let cancelled = false
+    const run = async () => {
+      engine.stopAll()
+      try {
+        await engine.speak(greetingCat.greeting, settings, greetingClip)
+      } catch {
+        return /* aborted */
+      }
+      if (!cancelled) setGreeted(true)
+    }
+    void run()
+    return () => {
+      cancelled = true
+    }
+    // Re-runs only when the world changes (component is keyed by world).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [greetingClip])
 
   const go = useCallback(
     (dir: 1 | -1) => {
@@ -60,9 +92,8 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
   // Play the sound, then the name (order per settings). A token guards against
   // navigating mid-sequence: stale runs bail out and stop the engine.
   useEffect(() => {
-    if (!current) return
+    if (!current || (greetingClip && !greeted)) return
     let cancelled = false
-    setIntroDone(false)
     const run = async () => {
       engine.stopAll()
       try {
@@ -82,22 +113,21 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
       } catch {
         /* aborted by navigation or a missing clip — stay quiet on this slide */
       }
-      if (!cancelled) setIntroDone(true)
     }
     void run()
     return () => {
       cancelled = true
       engine.stopAll()
     }
-  }, [current, replayNonce, settings.sequence, settings.rate, settings.voiceURI])
+  }, [current, replayNonce, settings.sequence, settings.rate, settings.voiceURI, greeted, greetingClip])
 
   // Auto-advance: play the full sound + name, pause for the configured gap,
   // then move on. Paused while settings are open or the app is hidden.
   useEffect(() => {
-    if (settings.mode !== 'auto' || settingsOpen || !pageVisible || !current || !introDone) return
+    if (settings.mode !== 'auto' || settingsOpen || !pageVisible || !current || !greeted) return
     const t = window.setTimeout(() => go(1), settings.autoSeconds * 1000)
     return () => window.clearTimeout(t)
-  }, [index, replayNonce, introDone, settings.mode, settings.autoSeconds, settingsOpen, pageVisible, go, current])
+  }, [index, replayNonce, greeted, settings.mode, settings.autoSeconds, settingsOpen, pageVisible, go, current])
 
   // Keep the screen on while he's watching (e.g. propped up during a feed).
   // Browsers auto-release the lock when the tab hides, so re-acquire on return.
@@ -175,7 +205,7 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
       <div className="stage">
         <div className="empty">
           <StarIcon />
-          <p>No favorites yet! Tap the star on an animal you love, and it will live here.</p>
+          <p>No favorites here yet! Tap the star on an animal you love, and it will live here.</p>
           <button onClick={() => onSettingsChange({ ...settings, favoritesOnly: false })}>
             Show all animals
           </button>
@@ -203,6 +233,16 @@ export default function Slideshow({ settings, onSettingsChange, favorites, onTog
         pop={pop}
         onPopEnd={() => setPop(false)}
       />
+
+      <button
+        className="world-chip"
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerUp={(e) => e.stopPropagation()}
+        onClick={onPickWorld}
+        aria-label="Change world"
+      >
+        {world === 'all' ? '🐾' : categoryInfo(world).emoji} {worldName(world)}
+      </button>
 
       <FavoriteStar active={favoritesSet.has(current.id)} onToggle={() => onToggleFavorite(current.id)} />
       <ParentGate onOpen={() => {

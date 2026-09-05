@@ -7,17 +7,26 @@ gate; everything else is toddler-proof.
 
 ## Features
 
-- **Slideshow** of 17 animals (farm first, then wild), shuffled each visit
+- **Five worlds, 38 animals** — Farm, Wild, Birds, Sea and Bugs; every game
+  starts by picking a world (or "All the animals!"), shuffled each visit
+- **Slideshow** of the chosen world with a spoken hello ("To the farm!") and a
+  world chip to hop between worlds without leaving
 - **Tap the animal** → plays the sound, then the spoken name (order and speed configurable)
+- **Guess who?** — scratch-card quiz; wrong answers stay encouraging, distractor
+  choices come from the answer's own category so similar animals get told apart
+- **Memory match** — three levels; small worlds automatically deal fewer pairs
+- **Find it!** — a full-bleed storybook scene per world (barnyard, savanna, sky
+  meadow, seabed, garden) with hidden emoji animals to find
+- **Gallery** — paged photo browser with world filters
 - **Favorites** — tap the star; optional "favorites only" mode (stored per device)
 - **Auto-advance mode** with speed setting, for wind-down time
 - **Parent gate** — hold the gear for 2 seconds to open settings; settings let you
   pick speaking speed, sound order, word visibility, and fullscreen
-- **Recorded voice** — all names and phrases ("Where is the cow?") play from
-  ElevenLabs voice clips; browser TTS remains only as a fallback if a clip fails
+- **Recorded voice** — all names and phrases ("Where is the cow?", world
+  greetings) play from ElevenLabs voice clips; browser TTS remains only as a
+  fallback if a clip fails
 - **Works offline** — the service worker precaches every photo, sound and voice
   clip; after the first visit it loads instantly with no network
-- Recorded voice clips can replace TTS later without code changes (see below)
 
 ## Development
 
@@ -33,7 +42,8 @@ npm run preview    # serve the production build locally
 1. Drop a photo into `assets-src/photos/<id>.jpg` (≥800px, square-croppable)
 2. Drop a sound into `assets-src/sounds/<id>.<mp3|ogg|wav|flac>` (1–15s ideal;
    silence at both ends is trimmed automatically, clips are capped at 8s with a fade)
-3. Add an entry to `src/data/animals.ts` (id, name, category, accent color)
+3. Add an entry to `src/data/animals.ts` (id, name, category, accent color, emoji —
+   the emoji appears as the sticker in Find it!)
 4. `npm run assets` — regenerates the optimized WebP photos and MP3 sounds
 5. Add a credits line to `assets-src/PHOTO-CREDITS.md` / `SOUND-CREDITS.md`
 

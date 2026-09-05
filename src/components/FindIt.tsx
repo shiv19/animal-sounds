@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ANIMALS, phraseClip } from '../data/animals'
-import type { AnimalAssets } from '../data/animals'
+import { phraseClip, worldAnimals, worldName, categoryInfo } from '../data/animals'
+import type { AnimalAssets, World } from '../data/animals'
 import { engine, wait } from '../lib/audio'
 import { shuffled } from '../lib/shuffle'
 import type { Settings } from '../lib/storage'
@@ -10,8 +10,10 @@ import { StarIcon } from './FavoriteStar'
 import { SpeakerIcon } from './QuizGame'
 
 interface Props {
+  world: World
   settings: Settings
   favorites: string[]
+  onPickWorld: () => void
   onHome: () => void
 }
 
@@ -28,30 +30,35 @@ interface Placement {
 interface Game {
   targets: AnimalAssets[]
   scene: Array<{ animal: AnimalAssets; pos: Placement }>
+  rounds: number
 }
 
 /** Jittered slot grid tuned to the current orientation, so stickers spread
     across the whole screen and can never overlap or hide behind the UI.
-    Rows stay inside the grass band — only sun and clouds live in the sky. */
+    Rows stay inside the ground band — only sun and clouds live in the sky. */
 function sceneSlots(landscape: boolean): Array<{ x: number; y: number }> {
   const cols = landscape ? [10, 30, 50, 70, 90] : [17, 50, 83]
   const rows = landscape ? [56, 82] : [57, 72, 87]
   return shuffled(cols.flatMap((x) => rows.map((y) => ({ x, y }))))
 }
 
-/** Favorite animals become the round targets when there are enough of them. */
-function buildGame(favorites: string[]): Game {
+/** Favorite animals become the round targets when there are enough of them;
+    small worlds simply get shorter games. */
+function buildGame(favorites: string[], world: World): Game {
   // Landscape spreads wider, so it can afford a couple more distractors.
   const landscape = window.innerWidth > window.innerHeight
   const sceneSize = landscape ? 10 : 8
-  const favPool = shuffled(ANIMALS.filter((a) => favorites.includes(a.id)))
-  const pool = favPool.length >= ROUNDS ? favPool : shuffled(ANIMALS)
-  const targets = pool.slice(0, ROUNDS)
-  const rest = shuffled(ANIMALS.filter((a) => !targets.some((t) => t.id === a.id)))
-  const scene = shuffled([...targets, ...rest.slice(0, sceneSize - targets.length)])
+  const pool = worldAnimals(world)
+  const rounds = Math.min(ROUNDS, pool.length)
+  const favPool = shuffled(pool.filter((a) => favorites.includes(a.id)))
+  const source = favPool.length >= rounds ? favPool : shuffled(pool)
+  const targets = source.slice(0, rounds)
+  const rest = shuffled(pool.filter((a) => !targets.some((t) => t.id === a.id)))
+  const scene = shuffled([...targets, ...rest.slice(0, Math.max(0, sceneSize - targets.length))])
   const slots = sceneSlots(landscape)
   return {
     targets,
+    rounds,
     scene: scene.map((animal, i) => {
       const slot = slots[i % slots.length]
       return {
@@ -67,8 +74,8 @@ function buildGame(favorites: string[]): Game {
   }
 }
 
-export default function FindIt({ settings, favorites, onHome }: Props) {
-  const [game, setGame] = useState<Game>(() => buildGame(favorites))
+export default function FindIt({ world, settings, favorites, onPickWorld, onHome }: Props) {
+  const [game, setGame] = useState<Game>(() => buildGame(favorites, world))
   const [round, setRound] = useState(0)
   const [solved, setSolved] = useState(false)
   const [misses, setMisses] = useState(0)
@@ -144,7 +151,7 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
         /* aborted */
       }
       if (seqRef.current !== my) return
-      if (round + 1 >= ROUNDS) {
+      if (round + 1 >= game.rounds) {
         setWon(true)
         void engine.speak('You found them all!', settings, phraseClip('found-all')).catch(() => {})
       } else {
@@ -163,16 +170,25 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
       .filter(Boolean)
       .join(' ')
 
+  const newGame = () => {
+    setGame(buildGame(favorites, world))
+    setRound(0)
+    setWon(false)
+  }
+
   return (
     <div className="game-screen findit-screen">
       <HomeButton onHome={onHome} />
-      <button className="chip back-chip" onClick={() => { setGame(buildGame(favorites)); setRound(0); setWon(false) }}>
+      <button className="chip back-chip" onClick={newGame}>
         <ShuffleIcon /> Shuffle
       </button>
 
       <div className="findit-top">
+        <button className="chip world-chip-inline" onClick={onPickWorld} aria-label="Change world">
+          {world === 'all' ? '🐾' : categoryInfo(world).emoji} {worldName(world)}
+        </button>
         <span className="chip find-chip">Find: {target.name}</span>
-        <span className="round-dots" aria-label={`Round ${round + 1} of ${ROUNDS}`}>
+        <span className="round-dots" aria-label={`Round ${round + 1} of ${game.rounds}`}>
           {game.targets.map((_, i) => (
             <span
               key={i}
@@ -186,7 +202,7 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
       </div>
 
       <div className="findit-scene">
-        <FarmScene />
+        <Scene world={world} />
         {game.scene.map(({ animal, pos }) => (
           <button
             key={animal.id}
@@ -212,15 +228,8 @@ export default function FindIt({ settings, favorites, onHome }: Props) {
           <div className="win-card">
             <StarIcon />
             <h3>You found them all!</h3>
-            <p>All {ROUNDS} animals found</p>
-            <button
-              className="primary-btn"
-              onClick={() => {
-                setGame(buildGame(favorites))
-                setRound(0)
-                setWon(false)
-              }}
-            >
+            <p>All {game.rounds} animals found</p>
+            <button className="primary-btn" onClick={newGame}>
               Play again
             </button>
             <button className="ghost-btn" onClick={onHome}>
@@ -243,6 +252,16 @@ function ShuffleIcon() {
       <path d="m4 4 5 5" />
     </svg>
   )
+}
+
+/** Each world gets its own storybook backdrop; the sticker band always sits
+    on the ground, so only the scenery changes between worlds. */
+function Scene({ world }: { world: World }) {
+  if (world === 'wild') return <WildScene />
+  if (world === 'birds') return <BirdsScene />
+  if (world === 'sea') return <SeaScene />
+  if (world === 'bugs') return <BugsScene />
+  return <FarmScene />
 }
 
 /** Full-bleed storybook farm: gradient sky and grass that fit any aspect
@@ -269,6 +288,89 @@ function FarmScene() {
       <span className="farm-prop flower flower-a">🌻</span>
       <span className="farm-prop flower flower-b">🌷</span>
       <span className="farm-prop flower flower-c">🌼</span>
+    </div>
+  )
+}
+
+/** Golden savanna: warm sky, dunes, an acacia and sun-baked grass. */
+function WildScene() {
+  return (
+    <div className="farm-backdrop" aria-hidden>
+      <div className="scene-sky wild-sky" />
+      <span className="farm-prop sun">🌞</span>
+      <span className="farm-prop cloud cloud-b">☁️</span>
+      <svg className="scene-horizon wild-dunes" viewBox="0 0 1200 90" preserveAspectRatio="none">
+        <path d="M0 90 V52 Q200 10 430 34 T820 26 T1200 40 V90 Z" fill="#e3c088" />
+      </svg>
+      <div className="scene-ground wild-ground" />
+      <span className="farm-prop tree tree-a">🌳</span>
+      <span className="farm-prop tree tree-b">🌴</span>
+      <span className="farm-prop rock">🪨</span>
+      <span className="farm-prop tuft tuft-a">🌾</span>
+      <span className="farm-prop tuft tuft-b">🌾</span>
+    </div>
+  )
+}
+
+/** A high blue sky for the birds: rainbow, drifting clouds and a cozy nest. */
+function BirdsScene() {
+  return (
+    <div className="farm-backdrop" aria-hidden>
+      <div className="scene-sky birds-sky" />
+      <span className="farm-prop sun">🌞</span>
+      <span className="farm-prop cloud cloud-a">☁️</span>
+      <span className="farm-prop cloud cloud-b">☁️</span>
+      <span className="farm-prop rainbow">🌈</span>
+      <svg className="scene-horizon birds-horizon" viewBox="0 0 1200 90" preserveAspectRatio="none">
+        <path d="M0 90 V38 Q260 2 500 26 T900 20 T1200 32 V90 Z" fill="#a9cf92" />
+      </svg>
+      <div className="scene-ground birds-ground" />
+      <span className="farm-prop tree tree-a">🌳</span>
+      <span className="farm-prop tree tree-b">🌲</span>
+      <span className="farm-prop nest">🪺</span>
+      <span className="farm-prop tuft tuft-a">🌿</span>
+      <span className="farm-prop tuft tuft-b">🌱</span>
+    </div>
+  )
+}
+
+/** Under the waves: blue light, rising bubbles and a sandy seabed. */
+function SeaScene() {
+  return (
+    <div className="farm-backdrop" aria-hidden>
+      <div className="scene-sky sea-water" />
+      <span className="farm-prop bubble bubble-a" />
+      <span className="farm-prop bubble bubble-b" />
+      <span className="farm-prop bubble bubble-c" />
+      <div className="scene-ground sea-sand" />
+      <svg className="scene-horizon sea-ripple" viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0 60 V26 Q300 2 600 20 T1200 18 V60 Z" fill="#e6d5a4" />
+      </svg>
+      <span className="farm-prop seaweed seaweed-a">🌿</span>
+      <span className="farm-prop seaweed seaweed-b">🌿</span>
+      <span className="farm-prop coral">🪸</span>
+      <span className="farm-prop shell">🐚</span>
+      <span className="farm-prop rock sea-rock">🪨</span>
+    </div>
+  )
+}
+
+/** A cozy garden for the tiny ones: big blooms and a mushroom toadstool. */
+function BugsScene() {
+  return (
+    <div className="farm-backdrop" aria-hidden>
+      <div className="scene-sky bugs-sky" />
+      <span className="farm-prop sun">🌞</span>
+      <svg className="scene-horizon bugs-horizon" viewBox="0 0 1200 90" preserveAspectRatio="none">
+        <path d="M0 90 V42 Q220 6 460 28 T860 22 T1200 30 V90 Z" fill="#a5cd8a" />
+      </svg>
+      <div className="scene-ground bugs-ground" />
+      <span className="farm-prop bloom bloom-a">🌺</span>
+      <span className="farm-prop bloom bloom-b">🌸</span>
+      <span className="farm-prop bloom bloom-c">🌼</span>
+      <span className="farm-prop mushroom">🍄</span>
+      <span className="farm-prop tuft tuft-a">🌿</span>
+      <span className="farm-prop tuft tuft-b">☘️</span>
     </div>
   )
 }

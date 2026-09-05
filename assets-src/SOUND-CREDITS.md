@@ -25,3 +25,27 @@ All clips sourced from Wikimedia Commons. Files keep their original formats; con
 `public/animals/names/*` and `public/animals/phrases/*` are generated speech
 (ElevenLabs, `eleven_multilingual_v2`, premade voice "Laura"), trimmed and
 loudness-matched for the app.
+
+## 2026 additions
+
+- donkey: "157763 felix-blume a-donkey-is-braying-in-his-enclosure-in-south-of-france.wav" by felix-blume — CC0 — https://commons.wikimedia.org/wiki/File:157763_felix-blume_a-donkey-is-braying-in-his-enclosure-in-south-of-france.wav
+- rooster: "Rooster crowing.ogg" by Filo gèn' — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Rooster_crowing.ogg
+- turkey: "Gobbler.ogg" by bod — Public domain — https://commons.wikimedia.org/wiki/File:Gobbler.ogg
+- goose: "Anser anser - Greylag Goose XC436358.mp3" by Joost van Bruggen (xeno-canto XC436358) — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Anser_anser_-_Greylag_Goose_XC436358.mp3
+- mouse: "Mouse voice.flac" by Yosef Ben Melamed — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Mouse_voice.flac
+- wolf: "Wolf howls.ogg" by US Fish & Wildlife Service — Public domain — https://commons.wikimedia.org/wiki/File:Wolf_howls.ogg
+- crocodile: "Alligatorbellowedit.ogg" by Borisblue (edited from a US Fish & Wildlife Service recording; edit licensed CC BY-SA 2.5) — Public domain — https://commons.wikimedia.org/wiki/File:Alligatorbellowedit.ogg
+- snake: "Rattlesnake.ogg" by US Fish & Wildlife Service — Public domain — https://commons.wikimedia.org/wiki/File:Rattlesnake.ogg
+- squirrel: "Tamiasciurus douglasii.ogg" by Parande — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Tamiasciurus_douglasii.ogg
+- parrot: "Scarlet macaw 01.wav" by Ganesh Mohan T — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Scarlet_macaw_01.wav
+- peacock: "MalePeacockCall.ogg" by Perlscrypt — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:MalePeacockCall.ogg
+- eagle: "Golden Eagle (Aquila chrysaetos) (W1CDR0001387 BD6).ogg" by British Library (from its digital collections) — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Golden_Eagle_(Aquila_chrysaetos)_(W1CDR0001387_BD6).ogg (a Yellowstone bald-eagle recording was tried first but its call is too faint to survive trimming)
+- flamingo: "Greater flamingo call recorded in March 2005 at Mayani, Satara.wav" by Sharadapte — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Greater_flamingo_call_recorded_in_March_2005_at_Mayani,_Satara.wav
+- whale: "Humpback-Whale-Song-and-Foraging-Behavior-on-an-Antarctic-Feeding-Ground-pone.0051214.s001.oga" by Stimpert A, Peavey L, Friedlaender A, Nowacek D — CC BY 2.5 — https://commons.wikimedia.org/wiki/File:Humpback-Whale-Song-and-Foraging-Behavior-on-an-Antarctic-Feeding-Ground-pone.0051214.s001.oga
+- dolphin: "161691 felixblume dolphin-screaming-underwater-in-caribbean-sea-mexico.wav" by felix.blume — CC0 — https://commons.wikimedia.org/wiki/File:161691_felixblume_dolphin-screaming-underwater-in-caribbean-sea-mexico.wav
+- seal: "Arctocephalus forsteri - sound.ogg" by New Zealand Department of Conservation — CC BY 4.0 — https://commons.wikimedia.org/wiki/File:Arctocephalus_forsteri_-_sound.ogg
+- penguin: "Vocal-individuality-cues-in-the-African-penguin-(Spheniscus-demersus)-a-source-filter-theory-srep17255-s2.oga" by Favaro L, Gamba M, Alfieri C, Pessani D, McElligott A — CC BY 4.0 — https://commons.wikimedia.org/wiki/File:Vocal-individuality-cues-in-the-African-penguin-(Spheniscus-demersus)-a-source-filter-theory-srep17255-s2.oga
+- bee: "Bee buzzing sound (animal noises).opus" by Spanac (Free Sounds Library) — CC BY 3.0 — https://commons.wikimedia.org/wiki/File:Bee_buzzing_sound_(animal_noises).opus
+- cricket: "Field cricket Gryllus pennsylvanicus.ogg" by Thatcher — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Field_cricket_Gryllus_pennsylvanicus.ogg
+- mosquito: "Komar.flac" by Muczek123 — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Komar.flac
+- hippo: Sound Effect by freesound_community (original recording by "toadie") from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/hippos-33576/ (no freely licensed hippo recording existed on Wikimedia Commons as of 2026-09; Pixabay used as for the duck clip above)

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent } from 'react'
-import { ANIMALS, phraseClip } from '../data/animals'
-import type { AnimalAssets } from '../data/animals'
+import { ANIMALS, categoryInfo, phraseClip, worldName, worldAnimals } from '../data/animals'
+import type { AnimalAssets, World } from '../data/animals'
 import { engine } from '../lib/audio'
 import type { Settings } from '../lib/storage'
 import { shuffled } from '../lib/shuffle'
@@ -13,11 +13,15 @@ interface Question {
   options: AnimalAssets[]
 }
 
-function buildQuestion(recent: string[], favorites: string[]): Question {
-  const favPool = ANIMALS.filter((a) => favorites.includes(a.id))
-  const pool = favPool.length >= 6 ? shuffled(favPool) : shuffled(ANIMALS)
+function buildQuestion(recent: string[], favorites: string[], world: World): Question {
+  const base = worldAnimals(world)
+  const favPool = base.filter((a) => favorites.includes(a.id))
+  const pool = favPool.length >= 6 ? shuffled(favPool) : shuffled(base)
   const candidates = pool.filter((a) => !recent.includes(a.id))
   const answer = candidates[0] ?? pool[0]
+  // Distractors stay within the answer's category — guessing means really
+  // telling similar animals apart. It may draw from outside the picked world
+  // when the world is small; a bird is a bird wherever it lives.
   const sameCategory = ANIMALS.filter((a) => a.id !== answer.id && a.category === answer.category)
   const distractors = shuffled(sameCategory).slice(0, 2)
   return { answer, options: shuffled([answer, ...distractors]) }
@@ -26,14 +30,16 @@ function buildQuestion(recent: string[], favorites: string[]): Question {
 const CLEAR_THRESHOLD = 0.42
 
 interface Props {
+  world: World
   settings: Settings
   favorites: string[]
+  onPickWorld: () => void
   onHome: () => void
 }
 
-export default function QuizGame({ settings, favorites, onHome }: Props) {
+export default function QuizGame({ world, settings, favorites, onPickWorld, onHome }: Props) {
   const [recent, setRecent] = useState<string[]>([])
-  const [question, setQuestion] = useState<Question>(() => buildQuestion([], favorites))
+  const [question, setQuestion] = useState<Question>(() => buildQuestion([], favorites, world))
   const [revealed, setRevealed] = useState(false)
   const [wrongPick, setWrongPick] = useState<string | null>(null)
   const [solved, setSolved] = useState(false)
@@ -183,7 +189,7 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
   const nextQuestion = () => {
     const nextRecent = [answer.id, ...recent].slice(0, 4)
     setRecent(nextRecent)
-    setQuestion(buildQuestion(nextRecent, favorites))
+    setQuestion(buildQuestion(nextRecent, favorites, world))
   }
 
   const pick = (id: string) => {
@@ -221,7 +227,9 @@ export default function QuizGame({ settings, favorites, onHome }: Props) {
     <div className="game-screen quiz-screen">
       <HomeButton onHome={onHome} />
       <header className="quiz-head">
-        <span className="chip">Guess who?</span>
+        <button className="chip world-chip-inline" onClick={onPickWorld} aria-label="Change world">
+          {world === 'all' ? '🐾' : categoryInfo(world).emoji} {worldName(world)}
+        </button>
         <span className="chip score-chip">
           <StarIcon /> {score}
         </span>

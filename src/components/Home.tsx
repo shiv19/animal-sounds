@@ -1,14 +1,11 @@
 import type { CSSProperties } from 'react'
+import type { Mode } from '../App'
 
 interface Props {
-  onSlideshow: () => void
-  onMemory: () => void
-  onQuiz: () => void
-  onGallery: () => void
-  onFindIt: () => void
+  onPickMode: (mode: Mode) => void
 }
 
-export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindIt }: Props) {
+export default function Home({ onPickMode }: Props) {
   return (
     <div className="splash home">
       <div className="splash-washes" aria-hidden>
@@ -26,7 +23,7 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
         <button
           className="menu-card"
           style={{ '--card-accent': '#79a85b' } as CSSProperties}
-          onClick={onSlideshow}
+          onClick={() => onPickMode('slideshow')}
         >
           <span className="menu-icon">
             <PlayIcon />
@@ -39,7 +36,7 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
         <button
           className="menu-card"
           style={{ '--card-accent': '#6b9bd1' } as CSSProperties}
-          onClick={onMemory}
+          onClick={() => onPickMode('memory')}
         >
           <span className="menu-icon">
             <MemoryIcon />
@@ -52,7 +49,7 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
         <button
           className="menu-card"
           style={{ '--card-accent': '#e8a13c' } as CSSProperties}
-          onClick={onQuiz}
+          onClick={() => onPickMode('quiz')}
         >
           <span className="menu-icon">
             <QuizIcon />
@@ -65,7 +62,7 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
         <button
           className="menu-card"
           style={{ '--card-accent': '#5bafa0' } as CSSProperties}
-          onClick={onGallery}
+          onClick={() => onPickMode('gallery')}
         >
           <span className="menu-icon">
             <GalleryIcon />
@@ -78,7 +75,7 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
         <button
           className="menu-card"
           style={{ '--card-accent': '#a277c9' } as CSSProperties}
-          onClick={onFindIt}
+          onClick={() => onPickMode('findit')}
         >
           <span className="menu-icon">
             <FindIcon />
@@ -91,8 +88,8 @@ export default function Home({ onSlideshow, onMemory, onQuiz, onGallery, onFindI
       </div>
       <p className="hint">Best with the sound turned up</p>
       <p className="hint parent-hint">
-        For parents: tap the ☆ to save favorites · press &amp; hold the gear (top-left) in the
-        slideshow for settings
+        For parents: every game starts by picking a world of animals · tap the ☆ to save favorites ·
+        press &amp; hold the gear (top-left) in the slideshow for settings
       </p>
     </div>
   )
