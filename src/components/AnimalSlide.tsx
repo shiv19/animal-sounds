@@ -5,6 +5,7 @@ interface Props {
   animal: AnimalAssets
   direction: 'next' | 'prev'
   showWord: boolean
+  immersive: boolean
   pop: boolean
   onPopEnd: () => void
 }
@@ -15,7 +16,22 @@ function tiltFor(id: string): string {
   return sum % 2 === 0 ? '-1.1deg' : '1.1deg'
 }
 
-export default function AnimalSlide({ animal, direction, showWord, pop, onPopEnd }: Props) {
+export default function AnimalSlide({ animal, direction, showWord, immersive, pop, onPopEnd }: Props) {
+  if (immersive) {
+    return (
+      <div className={`slide slide-immersive ${direction === 'prev' ? 'dir-prev' : 'dir-next'}`}>
+        <img
+          className={pop ? 'photo-full pop' : 'photo-full'}
+          src={animal.photo}
+          alt={animal.name}
+          draggable={false}
+          onAnimationEnd={onPopEnd}
+        />
+        {showWord && <h1 className="word word-overlay">{animal.name}</h1>}
+      </div>
+    )
+  }
+
   return (
     <div className={`slide ${direction === 'prev' ? 'dir-prev' : 'dir-next'}`}>
       <figure

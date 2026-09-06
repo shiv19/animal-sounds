@@ -59,7 +59,7 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
               onChange={(v) => onChange({ autoSeconds: Number(v) })}
               options={[
                 { v: '1', label: 'Short · 1s' },
-                { v: '2', label: 'Normal · 2s' },
+                { v: '2', label: 'Medium · 2s' },
                 { v: '4', label: 'Long · 4s' }
               ]}
             />
@@ -81,6 +81,17 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
             ]}
           />
         </div>
+
+        <div className="row">
+          <span>Immersive photos</span>
+          <Switch checked={settings.immersive} onChange={(immersive) => onChange({ immersive })} />
+        </div>
+        {settings.immersive && (
+          <p className="field-note">
+            Photos fill the whole screen with no card around them. The written word sits on the
+            photo when “show the written word” is on.
+          </p>
+        )}
 
         <div className="row">
           <span>Show the written word</span>

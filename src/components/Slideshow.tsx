@@ -216,7 +216,7 @@ export default function Slideshow({
 
   return (
     <div
-      className="stage"
+      className={settings.immersive ? 'stage stage-immersive' : 'stage'}
       style={{ '--accent': current.accent } as CSSProperties}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
@@ -230,6 +230,7 @@ export default function Slideshow({
         animal={current}
         direction={direction}
         showWord={settings.showWord}
+        immersive={settings.immersive}
         pop={pop}
         onPopEnd={() => setPop(false)}
       />

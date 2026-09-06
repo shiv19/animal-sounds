@@ -10,6 +10,8 @@ export interface Settings extends SpeechConfig {
   autoSeconds: number
   sequence: Sequence
   showWord: boolean
+  /** Photo fills the whole screen, edge to edge, instead of sitting in a card */
+  immersive: boolean
   favoritesOnly: boolean
 }
 
@@ -17,9 +19,10 @@ export const AUTO_PAUSE_SECONDS = [1, 2, 4] as const
 
 export const DEFAULT_SETTINGS: Settings = {
   mode: 'tap',
-  autoSeconds: 2,
+  autoSeconds: 4,
   sequence: 'sound-first',
   showWord: true,
+  immersive: false,
   favoritesOnly: false,
   voiceSource: 'recorded',
   voiceURI: null,
@@ -79,9 +82,11 @@ export function useStoredState<T>(
 
 /** Old builds stored slide-length timers (4/7/10s); they are pauses now. */
 function normalizeSettings(s: Settings): Settings {
-  return (AUTO_PAUSE_SECONDS as readonly number[]).includes(s.autoSeconds)
-    ? s
-    : { ...s, autoSeconds: DEFAULT_SETTINGS.autoSeconds }
+  if (!(AUTO_PAUSE_SECONDS as readonly number[]).includes(s.autoSeconds)) {
+    return { ...s, autoSeconds: DEFAULT_SETTINGS.autoSeconds }
+  }
+  // The pause default moved from 2s to 4s; carry settings that never touched it along.
+  return s.autoSeconds === 2 ? { ...s, autoSeconds: 4 } : s
 }
 
 export const useSettings = () => useStoredState<Settings>('animal-sounds:settings', DEFAULT_SETTINGS, normalizeSettings)

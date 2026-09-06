@@ -174,6 +174,102 @@ button {
   }
 }
 
+/* Immersive slides: the photo is the screen. A crossfade-settle instead of the
+   horizontal slide — a full-bleed image has no edge to slide in from. */
+
+.slide-immersive {
+  padding: 0;
+}
+
+.slide-immersive.dir-next,
+.slide-immersive.dir-prev {
+  animation: immersive-in 0.6s var(--ease);
+}
+
+@keyframes immersive-in {
+  from {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+}
+
+.photo-full {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-full.pop {
+  animation: pop-full 0.3s var(--ease);
+}
+
+@keyframes pop-full {
+  50% {
+    transform: scale(0.965);
+  }
+}
+
+/* The word rides on the photo, so it gets a cream pill to stay readable on any image. */
+.word-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: calc(clamp(38px, 8vmin, 64px) + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 3;
+  max-width: 94vw;
+  background: color-mix(in srgb, var(--card) 84%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: 0.04em 0.42em 0.14em;
+  border-radius: 999px;
+  box-shadow: 0 14px 32px -16px rgba(74, 56, 43, 0.55);
+  text-shadow: none;
+  animation: word-overlay-in 0.6s var(--ease) 0.1s backwards;
+}
+
+@keyframes word-overlay-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px) scale(0.9);
+  }
+}
+
+/* Corner controls sit on the photo now — cream chips and cream dots keep them
+   visible on light and dark images alike. */
+
+.stage-immersive .star,
+.stage-immersive .gate {
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 6px 16px -10px rgba(74, 56, 43, 0.5);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.stage-immersive .gate {
+  opacity: 0.55;
+}
+
+.stage-immersive .dot {
+  background: rgba(251, 243, 228, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.stage-immersive .dot.on {
+  background: rgba(251, 243, 228, 0.95);
+}
+
+.stage-immersive .dots-bar {
+  background: rgba(251, 243, 228, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.stage-immersive .dots-bar-fill {
+  background: rgba(251, 243, 228, 0.92);
+}
+
 /* ---------- corner controls ---------- */
 
 .star {
