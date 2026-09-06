@@ -40,3 +40,34 @@
 - bee: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a86489b6806a.jpeg
 - cricket: unknown — unverified — Pexels (via image search; green katydid, cricket-like) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/929984924eac.jpeg
 - mosquito: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/378e427f3041.jpg
+- swan: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b6a11439d5bb.jpeg
+- dove: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0c3f52ead91a.jpeg
+- chick: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ed2d9f7e3aa7.jpg
+- crow: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0701e656f353.jpg
+- cuckoo: unknown — unverified — BirdLife DataZone (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/df9f08f69f73.jpg
+- woodpecker: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c552b3e0c1ba.jpg
+- seagull: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/09d0dd2a8b37.jpeg
+- nightingale: unknown — unverified — The Guardian (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4ab211dc0176.jpg
+- blackbird: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e8439ad5ee7a.jpg
+- robin: unknown — unverified — Irish Examiner (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fff2ea5e7b52.jpg
+- orca: unknown — unverified — Alpha Coders (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a76b8129a434.jpg
+- beluga: unknown — unverified — NewsForKids.net (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/333e41e1f068.jpg
+- pilotwhale: Cayambe — CC BY-SA 3.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/f/fd/Globicephala_macrorhynchus_Tenerife_2012_%28cropped%29.jpg
+- otter: unknown — unverified — A-Z Animals (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/24ab64987254.jpg
+- shrimp: unknown — unverified — Unsplash (via image search; peacock mantis shrimp) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5f59b1817b22.jpg
+- turtle: Brocken Inaglory — CC BY-SA 3.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/e/e5/Green_turtle_swimming_over_coral_reefs_in_Kona.jpg
+- walrus: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c913266339dc.jpeg
+- sealion: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e83267632033.jpg
+- crab: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/21d0931e6284.jpeg
+- lobster: Diego Delso — CC BY-SA 4.0 — Wikimedia Commons (ornate/spiny rock lobster) — https://upload.wikimedia.org/wikipedia/commons/9/95/Langosta_%28Panulirus_ornatus%29%2C_Nosy_Iranja%2C_Madagascar%2C_2025-09-17%2C_DD_07.jpg
+- porpoise: unknown — unverified — Monterey Bay Whale Watch (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/87be0b2d0758.jpg
+- fly: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/16b22e01224d.jpg
+- wasp: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2f71aa55f723.jpg
+- hornet: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7d06ab4e6a39.jpeg
+- bumblebee: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0817ef9e6324.jpeg
+- ant: unknown — unverified — DeviantArt (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/79a6bfeaf0cb.jpg
+- grasshopper: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0f006f1bd7fa.jpg
+- cicada: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/63465a83c35b.jpeg
+- katydid: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f5a2baf8e51a.jpg
+- beetle: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3e503583a59c.jpeg
+- cockroach: Peter Cooper Jr. — CC0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/b/bd/Cici_the_Madagascan_Hissing_Cockroach%2C_Capen_Hill_2026-06-01.jpg

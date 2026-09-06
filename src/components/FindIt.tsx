@@ -52,9 +52,14 @@ function buildGame(favorites: string[], world: World): Game {
   const rounds = Math.min(ROUNDS, pool.length)
   const favPool = shuffled(pool.filter((a) => favorites.includes(a.id)))
   const source = favPool.length >= rounds ? favPool : shuffled(pool)
-  const targets = source.slice(0, rounds)
+  // Some worlds have several species sharing one sticker emoji (five birds are
+  // 🐦) — prefer distinct emojis for targets and decoys so "Find the
+  // Woodpecker" is never ambiguous, only reusing one when the pool runs dry.
+  const targets = pickDiverse(source, rounds)
   const rest = shuffled(pool.filter((a) => !targets.some((t) => t.id === a.id)))
-  const scene = shuffled([...targets, ...rest.slice(0, Math.max(0, sceneSize - targets.length))])
+  const usedEmojis = new Set(targets.map((t) => t.emoji))
+  const decoys = pickDiverse(rest, Math.max(0, sceneSize - targets.length), usedEmojis)
+  const scene = shuffled([...targets, ...decoys])
   const slots = sceneSlots(landscape)
   return {
     targets,
@@ -72,6 +77,22 @@ function buildGame(favorites: string[], world: World): Game {
       }
     })
   }
+}
+
+/** Greedily takes up to `count` animals with unused emojis first, falling back
+    to emoji repeats only once the distinct ones run out. */
+function pickDiverse(pool: AnimalAssets[], count: number, taken?: Set<string>): AnimalAssets[] {
+  const seen = new Set(taken)
+  const distinct: AnimalAssets[] = []
+  const repeats: AnimalAssets[] = []
+  for (const a of pool) {
+    if (seen.has(a.emoji)) repeats.push(a)
+    else {
+      seen.add(a.emoji)
+      distinct.push(a)
+    }
+  }
+  return [...distinct, ...repeats].slice(0, count)
 }
 
 export default function FindIt({ world, settings, favorites, onPickWorld, onHome }: Props) {

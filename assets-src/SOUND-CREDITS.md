@@ -49,3 +49,72 @@ loudness-matched for the app.
 - cricket: "Field cricket Gryllus pennsylvanicus.ogg" by Thatcher — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Field_cricket_Gryllus_pennsylvanicus.ogg
 - mosquito: "Komar.flac" by Muczek123 — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Komar.flac
 - hippo: Sound Effect by freesound_community (original recording by "toadie") from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/hippos-33576/ (no freely licensed hippo recording existed on Wikimedia Commons as of 2026-09; Pixabay used as for the duck clip above)
+
+## 2026-09 world expansion (birds, sea, bugs)
+
+# Bird sound credits (2026 addition)
+
+All clips sourced from Wikimedia Commons. Files keep their original formats; conversion/trimming and loudness normalization happen in the build step.
+
+- swan: "Cygnus olor - Mute Swan XC434964.mp3" by Joost van Bruggen — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Cygnus_olor_-_Mute_Swan_XC434964.mp3 (loud wingbeats of 2-3 mute swans; Commons has no clearly audible mute swan call recording — the only call file, XC307509, measured -31.5 LUFS distant ambient)
+- dove: "Chant Tourterelle Turque domestiquée (Siffli).wav" by Opsylac — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Chant_Tourterelle_Turque_domestiquée_(Siffli).wav (Eurasian collared dove cooing)
+- chick: "মুরগির বাচ্চার ডাক.oga" by Md. Tahmid Hossain — CC0 — https://commons.wikimedia.org/wiki/File:মুরগির_বাচ্চার_ডাক.oga (calls of a group of baby chickens)
+- crow: "Corvus corone - Carrion Crow XC507919.mp3" by Marie-Lan Taÿ Pamart — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Corvus_corone_-_Carrion_Crow_XC507919.mp3 (territorial caws)
+- cuckoo: "Common Cuckoo (Gjøk) (Cuculus canorus) - Sortland, Norway 2023-07-14.mp3" by Ryan Hodnett — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Common_Cuckoo_(Gjøk)_(Cuculus_canorus)_-_Sortland,_Norway_2023-07-14.mp3 (two-note cuckoo call)
+- woodpecker: "Great Spotted Woodpecker drum.ogg" by T.Voekler — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Great_Spotted_Woodpecker_drum.ogg (drumming on wood)
+- seagull: "Gull 2.ogg" by avphillips — Public domain — https://commons.wikimedia.org/wiki/File:Gull_2.ogg (herring gull calls)
+- nightingale: "Nightingale (Luscinia megarhynchos).ogg" by Helical gear — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Nightingale_(Luscinia_megarhynchos).ogg (song, Surrey, England)
+- blackbird: "Common Blackbird song (Turdus merula).ogg" by Diana Tudor — CC BY 4.0 — https://commons.wikimedia.org/wiki/File:Common_Blackbird_song_(Turdus_merula).ogg (song from canopy)
+- robin: "Erithacus rubecula - European Robin XC542842.mp3" by Benoît Van Hecke — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Erithacus_rubecula_-_European_Robin_XC542842.mp3 (male song)
+
+# Sea Animal Sound Credits
+
+All clips are freely licensed (Public Domain / CC0 / CC BY / CC BY-SA, or Pixabay Content License).
+Files keep their original formats; conversion/trimming/loudness normalization happens in the build step.
+
+- orca: "Killer whale residents broadband.ogg" — Public domain (author not credited on Commons) — https://commons.wikimedia.org/wiki/File:Killer_whale_residents_broadband.ogg
+- beluga: "Beluga vocalizations.ogg" by Fisheries Research Agency, Japan (recorded with NOAA contract support to Hubbs-SeaWorld Research Institute) — Public domain — https://commons.wikimedia.org/wiki/File:Beluga_vocalizations.ogg
+- pilotwhale: "Long finned Pilot Whales orig.ogg" by L. Ginzkey — CC BY-SA 2.5 — https://commons.wikimedia.org/wiki/File:Long_finned_Pilot_Whales_orig.ogg
+- otter: "Smooth-coated otter sound.wav" by Ganesh Mohan T — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Smooth-coated_otter_sound.wav
+- turtle: "Sound of tortoise sex.ogg" by Amada44 — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Sound_of_tortoise_sex.ogg (no sea-turtle hatchling recording was freely available; this is the brief's fallback, real tortoise air-displacement grunts)
+- sealion: Sound Effect by freesound_community from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/nature-sea-lions-in-santa-cruz-23281/ (California sea lions barking at the Santa Cruz wharf)
+- shrimp: "hydrophonesnappingshrimp03.mp3" by John Grzinich (Radio Aporee) — Public Domain Mark 1.0 — https://archive.org/details/aporee_20758_24088 (snapping shrimp colony crackle, Valparaiso harbor hydrophone)
+- lobster: Sound Effect by freesound_community from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/film-special-effects-200612-lobsters-breathing-clicking-watery-almost-electrical-5pm-22884/ (lobster clicking in water; very quiet source, -40 LUFS — normalization needed)
+- crab: Sound Effect by SondangSirait419 from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/nature-kepiting-220057/ ("Kepiting" = crab in Indonesian; a single ~0.8 s gurgle — see note below)
+
+## Notes / gaps
+
+- walrus: NO freely licensed walrus vocalization could be found on Wikimedia Commons, Pixabay, or archive.org (PD/CC0/CC BY/CC BY-SA only) as of 2026-09-06. Commons has no walrus audio at all; Pixabay's only "walrus" item is a 1 s clip of a person saying the word. Needs another source or a substitute.
+- porpoise: NO harbour porpoise echolocation-click recording found on the allowed sources. Commons has zero porpoise audio files (verified via search and the "Audio files by species" category tree), Pixabay has no porpoise items, and nothing usable surfaced on archive.org. Note: harbour porpoise clicks are high-frequency/ultrasonic; audible recordings are rare in general. Pixabay does have "Dolphin Clicking" (https://pixabay.com/sound-effects/nature-dolphin-clicking-487655/) but it is a dolphin, not a porpoise, and the app already has a dolphin sound — not shipped to avoid a mislabeled species.
+- crab: the shipped clip is the only genuine crab sound found after an extended search (Commons: nothing; archive.org: nothing; Pixabay: this plus sound-design "monster growl" items). It is a single 0.84 s gurgle (below the usual 1-90 s verification window) — the main agent should decide whether to keep it, loop it in the build, or drop the crab sound.
+- lobster: the clip passes duration but its integrated loudness is -40 LUFS (quiet source, sparse clicks); heavier normalization than usual will be needed.
+- sealion (97.4 s) and shrimp (98.4 s) slightly exceed the 90 s verification guideline; both are dense with the target sound throughout, so a short trim in the build is trivial.
+- An alternative sea-lion recording exists if ever needed: "LoboMarinoCaletaPortalesBIS.mp3" by Felix Blume, Public Domain Mark 1.0, 70 s, -13.7 LUFS, https://archive.org/details/aporee_37576_43021 — but it is a South American sea lion (Otaria flavescens), not Zalophus californianus.
+
+# Bug Sound Credits
+
+- fly: "Zumbido de mosca doméstica.ogg" by Luisalvaz — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Zumbido_de_mosca_dom%C3%A9stica.ogg
+- wasp: Sound Effect by freesound_community from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/nature-wasp-bee-buzzing-in-a-dome-190918-62188/
+- hornet: Sound Effect by Kuzu420 from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/nature-wasps-flying-around-juice-barrels-253108/
+- bumblebee: "Bombus buzz.ogg" by Mysid — Public domain — https://commons.wikimedia.org/wiki/File:Bombus_buzz.ogg
+- ant: "Megaponera analis, stridulerende kolonne, 2023-05-10 16h16, Skrikfontein, b.mp3" by JMK — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Megaponera_analis,_stridulerende_kolonne,_2023-05-10_16h16,_Skrikfontein,_b.mp3
+- grasshopper: "Chorthippus apricarius - sound.oga" by Baudewijn Odé — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Chorthippus_apricarius_-_sound.oga
+- cicada: "Cicada orni (Singing).ogg" by Travus — CC BY-SA 2.5 — https://commons.wikimedia.org/wiki/File:Cicada_orni_(Singing).ogg
+- katydid: "Tettigonia viridissima - sound.ogg" by Baudewijn Odé — CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Tettigonia_viridissima_-_sound.ogg
+- beetle: Sound Effect by MagiaZ from Pixabay — Pixabay Content License — https://pixabay.com/sound-effects/nature-beetle-flying-at-high-528093/
+- cockroach: "Tarakan.ogg" by Grinkod — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Tarakan.ogg
+
+## Notes
+
+- hornet: No freely-licensed Vespa crabro recording exists on Wikimedia Commons, Pixabay, or archive.org
+  (verified via Commons API searches for "Vespa crabro", "hornet", "Hornisse", "frelon", "guêpe",
+  "Шершень", "szerszeń", "šršen"; archive.org searches for "european hornet"/"hornet buzz"). The hornet
+  clip is a close-up real recording of vespine wasps (hornet-family) in flight, sharpest/largest of the
+  vespine options; used as the hornet voice.
+- fly: "Zumbido de mosca doméstica" = housefly (Musca domestica) wing buzz (Spanish).
+- ant: Megaponera analis (matabele ant) raiding column stridulating/rustling — a genuine ant recording.
+- cockroach: Tarakan.ogg is described on Commons as "Hissing of Madagascar hissing cockroach"
+  (Gromphadorhina portentosa).
+- beetle: "Beetle_flying_at_high" is a large beetle's flight buzz (Pixabay tags: Beetle, Insect, Ladybug).
+- wasp: "Wasp bee buzzing in a dome" — close-up wasp flight buzz (Pixabay tag: Wasp).
+- All files 5–35 s, integrated loudness between -11.1 and -29.9 LUFS (none below the -35 LUFS reject line).

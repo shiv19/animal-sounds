@@ -250,11 +250,17 @@ export default function Slideshow({
         setSettingsOpen(true)
       }} />
 
-      <div className="dots" aria-hidden>
-        {deck.map((a, i) => (
-          <span key={a.id} className={i === index ? 'dot on' : 'dot'} />
-        ))}
-      </div>
+      {deck.length <= 20 ? (
+        <div className="dots" aria-hidden>
+          {deck.map((a, i) => (
+            <span key={a.id} className={i === index ? 'dot on' : 'dot'} />
+          ))}
+        </div>
+      ) : (
+        <div className="dots-bar" aria-hidden>
+          <span className="dots-bar-fill" style={{ width: `${((index + 1) / deck.length) * 100}%` }} />
+        </div>
+      )}
 
       {settingsOpen && (
         <SettingsSheet

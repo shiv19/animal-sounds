@@ -272,6 +272,28 @@ button {
   background: rgba(74, 56, 43, 0.55);
 }
 
+/* Big decks would need more dots than the screen can hold — use a bar. */
+.dots-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 2;
+  width: min(180px, 40vw);
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(74, 56, 43, 0.14);
+  overflow: hidden;
+}
+
+.dots-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(74, 56, 43, 0.5);
+  transition: width 0.35s var(--ease);
+}
+
 /* ---------- splash ---------- */
 
 .splash {
