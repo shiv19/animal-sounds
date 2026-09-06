@@ -21,6 +21,17 @@ mkdirSync(outSounds, { recursive: true })
 
 const newer = (src, dst) => !existsSync(dst) || statSync(src).mtimeMs > statSync(dst).mtimeMs
 
+// Square-crop placement for subjects that aren't centered in their source:
+// fx/fy slide the 1:1 crop window within the available slack (0 = left/top
+// edge, 0.5 = centered). A flamingo's head at the very top of a portrait or a
+// hippo at a landscape's left edge gets clipped by a blind center crop.
+const cropOverrides = {
+  flamingo: { fy: 0.05 },
+  hippo: { fx: 0 },
+  donkey: { fy: 0.02 },
+  cicada: { fx: 0.05 }
+}
+
 /**
  * Trim silence from both ends (keeping a small natural pad), cap at 8s and
  * fade the tail so nothing ends abruptly.
@@ -42,12 +53,23 @@ if (existsSync(srcPhotos)) {
     const src = join(srcPhotos, file)
     const dst = join(outPhotos, `${id}.webp`)
     if (!newer(src, dst)) continue
+    const placement = cropOverrides[id] ?? {}
+    const [rw, rh, orientName] = execFileSync(
+      'magick',
+      ['identify', '-format', '%w %h %[orientation]', src]
+    ).toString().trim().split(/\s+/).map(Number)
+    // EXIF-rotated sources: crop coordinates must follow the oriented image.
+    const rotated = orientName === 5 || orientName === 6
+    const w = rotated ? rh : rw
+    const h = rotated ? rw : rh
+    const side = Math.min(w, h)
+    const x = Math.round((w - side) * (placement.fx ?? 0.5))
+    const y = Math.round((h - side) * (placement.fy ?? 0.5))
     execFileSync('magick', [
       src,
       '-auto-orient',
-      '-resize', '1000x1000^',
-      '-gravity', 'center',
-      '-extent', '1000x1000',
+      '-crop', `${side}x${side}+${x}+${y}`, '+repage',
+      '-resize', '1000x1000',
       '-strip',
       '-quality', '84',
       dst

@@ -54,12 +54,12 @@
 - beluga: unknown — unverified — NewsForKids.net (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/333e41e1f068.jpg
 - pilotwhale: Cayambe — CC BY-SA 3.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/f/fd/Globicephala_macrorhynchus_Tenerife_2012_%28cropped%29.jpg
 - otter: unknown — unverified — A-Z Animals (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/24ab64987254.jpg
-- shrimp: unknown — unverified — Unsplash (via image search; peacock mantis shrimp) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5f59b1817b22.jpg
+- shrimp: unknown — unverified — AlgaeBarn (via image search; peppermint/cleaner shrimp) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7f0c4a5472cf.jpg
 - turtle: Brocken Inaglory — CC BY-SA 3.0 — Wikimedia Commons — https://upload.wikimedia.org/wikipedia/commons/e/e5/Green_turtle_swimming_over_coral_reefs_in_Kona.jpg
 - walrus: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c913266339dc.jpeg
 - sealion: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e83267632033.jpg
 - crab: unknown — unverified — Pexels (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/21d0931e6284.jpeg
-- lobster: Diego Delso — CC BY-SA 4.0 — Wikimedia Commons (ornate/spiny rock lobster) — https://upload.wikimedia.org/wikipedia/commons/9/95/Langosta_%28Panulirus_ornatus%29%2C_Nosy_Iranja%2C_Madagascar%2C_2025-09-17%2C_DD_07.jpg
+- lobster: unknown — unverified — A-Z Animals (via image search; American lobster) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2e5f24c369c7.jpg
 - porpoise: unknown — unverified — Monterey Bay Whale Watch (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/87be0b2d0758.jpg
 - fly: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/16b22e01224d.jpg
 - wasp: unknown — unverified — Unsplash (via image search) — https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2f71aa55f723.jpg
