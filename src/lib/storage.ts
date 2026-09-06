@@ -21,6 +21,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sequence: 'sound-first',
   showWord: true,
   favoritesOnly: false,
+  voiceSource: 'recorded',
   voiceURI: null,
   rate: 0.85
 }

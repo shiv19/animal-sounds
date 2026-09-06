@@ -1,4 +1,8 @@
+export type VoiceSource = 'recorded' | 'device'
+
 export interface SpeechConfig {
+  /** Where spoken words come from: the recorded voice clips or on-device TTS */
+  voiceSource: VoiceSource
   voiceURI: string | null
   rate: number
 }
@@ -106,14 +110,15 @@ class AudioEngine {
   }
 
   /**
-   * Speak a name or phrase. Prefers the recorded clip — one consistent voice
-   * everywhere, no TTS engine flakiness — with the rate slider applied as
-   * playbackRate (pitch-preserving). Falls back to browser TTS only when the
-   * clip is missing or fails; a 'stopped' abort propagates so navigating
-   * away never triggers the fallback.
+   * Speak a name or phrase. By default prefers the recorded clip — one
+   * consistent voice everywhere, no TTS engine flakiness — with the rate
+   * slider applied as playbackRate (pitch-preserving). Falls back to browser
+   * TTS when the clip is missing or fails, or when the parent picked the
+   * device voice; a 'stopped' abort propagates so navigating away never
+   * triggers the fallback.
    */
   speak(name: string, cfg: SpeechConfig, clip?: string): Promise<void> {
-    if (!clip) return this.speakTTS(name, cfg)
+    if (!clip || cfg.voiceSource === 'device') return this.speakTTS(name, cfg)
     const rate = Math.min(Math.max(cfg.rate, 0.6), 1.2)
     return this.playClip(clip, rate).catch((err: unknown) => {
       if (err instanceof Error && err.message === 'stopped') throw err

@@ -94,26 +94,43 @@ export default function SettingsSheet({ settings, onChange, voices, onClose, onH
 
         <div className="field">
           <label>Voice</label>
-          <div className="voice-row">
-            <select
-              value={settings.voiceURI ?? ''}
-              onChange={(e) => onChange({ voiceURI: e.target.value || null })}
-            >
-              <option value="">Device default</option>
-              {englishVoices.map((v) => (
-                <option key={v.voiceURI} value={v.voiceURI}>
-                  {v.name} ({v.lang}){v.localService ? '' : ' — network'}
-                </option>
-              ))}
-            </select>
-            <button className="ghost-btn" onClick={testVoice}>
-              Test
-            </button>
-          </div>
-          <p className="field-note">
-            Words play from a recorded voice. This picker only applies if a recording fails to load,
-            in which case the browser reads the words instead.
-          </p>
+          <Segment
+            value={settings.voiceSource}
+            onChange={(voiceSource) => onChange({ voiceSource })}
+            options={[
+              { v: 'recorded', label: 'Recorded voice' },
+              { v: 'device', label: 'Device voice' }
+            ]}
+          />
+          {settings.voiceSource === 'recorded' ? (
+            <p className="field-note">
+              Words play from a recorded voice. If a recording fails to load, the device voice below
+              reads the words instead.
+            </p>
+          ) : (
+            <>
+              <div className="voice-row">
+                <select
+                  value={settings.voiceURI ?? ''}
+                  onChange={(e) => onChange({ voiceURI: e.target.value || null })}
+                >
+                  <option value="">Device default</option>
+                  {englishVoices.map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name} ({v.lang}){v.localService ? '' : ' — network'}
+                    </option>
+                  ))}
+                </select>
+                <button className="ghost-btn" onClick={testVoice}>
+                  Test
+                </button>
+              </div>
+              <p className="field-note">
+                Words are read aloud by the device's built-in speech. Which voices are available
+                depends on your phone or browser.
+              </p>
+            </>
+          )}
         </div>
 
         <div className="field">

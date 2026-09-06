@@ -1431,9 +1431,18 @@ input[type='range'] {
   inset: 0;
   z-index: 40;
   display: flex;
-  overflow-y: auto;
+  /* hidden, not auto: the decorative washes poke past the edges and would
+     otherwise make the whole sheet side-scrollable on narrow screens */
+  overflow: hidden auto;
   background: var(--cream);
   animation: fade-in 0.35s var(--ease);
+}
+
+.picker-washes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .picker-inner {
