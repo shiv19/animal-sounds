@@ -9,14 +9,15 @@ import HomeButton from './HomeButton'
 interface Props {
   world: World
   settings: Settings
-  onPickWorld: () => void
+  /** Pills filter directly — unlike other modes' chips, no picker detour. */
+  onWorldChange: (w: World) => void
   onHome: () => void
 }
 
 /** Few, large tiles per page — small fingers need big targets. */
 const PAGE_SIZE = 6
 
-export default function Gallery({ world, settings, onPickWorld, onHome }: Props) {
+export default function Gallery({ world, settings, onWorldChange, onHome }: Props) {
   const seqRef = useRef(0)
   // Shuffled on every entry and world change, and re-shufflable on demand —
   // so "where's the cow?" never happens in the same spot twice.
@@ -55,14 +56,17 @@ export default function Gallery({ world, settings, onPickWorld, onHome }: Props)
         <ShuffleIcon /> Shuffle
       </button>
       <div className="filter-bar" role="tablist" aria-label="Animal worlds">
-        <button className={world === 'all' ? 'filter-chip on' : 'filter-chip'} onClick={onPickWorld}>
+        <button
+          className={world === 'all' ? 'filter-chip on' : 'filter-chip'}
+          onClick={() => onWorldChange('all')}
+        >
           🐾 All
         </button>
         {CATEGORIES.map((cat) => (
           <button
             key={cat.id}
             className={world === cat.id ? 'filter-chip on' : 'filter-chip'}
-            onClick={onPickWorld}
+            onClick={() => onWorldChange(cat.id)}
           >
             {cat.emoji} {cat.name}
           </button>

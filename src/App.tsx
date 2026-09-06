@@ -99,7 +99,7 @@ export default function App() {
         key={world}
         world={world}
         settings={settings}
-        onPickWorld={() => setPickerMode('gallery')}
+        onWorldChange={changeWorld}
         onHome={goHome}
       />
     )
